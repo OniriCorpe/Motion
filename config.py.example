@@ -9,6 +9,6 @@ agenda_db_id = ""
 
 
 # optional (true/false)
-show_date = "true"
+show_date = True
 # get the database template: https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
 meds_db_id = ""
