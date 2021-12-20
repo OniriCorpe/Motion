@@ -28,7 +28,7 @@ if config.agenda_db_id != "": # check that the db id is filled in
     next_events = notion.databases.query(
         **{
             "database_id": config.agenda_db_id,
-            "filter": {
+            "filter": { # get only the items that come in this rolling week
                 "property": "Date",
                 "date": {
                     "next_week": {},
@@ -38,14 +38,14 @@ if config.agenda_db_id != "": # check that the db id is filled in
     )
     pprint(next_events)
 else: # if the db id isn't filled in
-    print("Please configure your database ID 'agenda_db_id' in the config file")
+    print("Please configure your database ID 'agenda_db_id' in your config file")
 
 
 if config.meds_db_id != "": # check that the db id is filled in
     meds_refill = notion.databases.query(
         **{
             "database_id": config.meds_db_id,
-            "filter": {
+            "filter": { # get only the elements that need to be restocked
                 "property": "Refill",
                 "checkbox": {
                     "equals": True,
