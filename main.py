@@ -3,7 +3,7 @@
 import os
 import notion_client
 from notion_client import Client
-from datetime import date, time
+from datetime import date
 import json
 import config
 
