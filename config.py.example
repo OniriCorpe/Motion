@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+# get your token: https://developers.notion.com/docs/getting-started
+NOTION_TOKEN = ""
+
+# get the database id: https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
+# get the database template: https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
+agenda_db_id = ""
+
+
+# optional (true/false)
+show_date = "true"
+# get the database template: https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
+meds_db_id = ""
