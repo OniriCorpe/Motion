@@ -11,22 +11,23 @@ from pprint import pprint
 
 
 # init the notion token
-if config.NOTION_TOKEN != "":  # check that the notion token id is filled in
+# get your token: https://developers.notion.com/docs/getting-started
+if config.NOTION_TOKEN != "":  # check that the notion token is filled
     notion = Client(auth=config.NOTION_TOKEN)
-else:  # if the notion token isn't filled in
+else:  # if the notion token isn't filled
     print("Please configure your Notion Token")
 
 
-# get and print today's date without year
-if config.show_date:  # if "show_date" is true in the config file, show the current date
+# get and print today's date (without year)
+if config.show_date:  # if 'show_date' is true in the configuration file, display the current date
     today = date.today()
     print(today.strftime("%d/%m"))
 
 
-if config.agenda_db_id != "":  # check that the db id is filled in
-    next_events = notion.databases.query(
+if config.agenda_db_id != "":  # check that the database ID is filled
+    next_events = notion.databases.query(  # query to the notion API
         **{
-            "database_id": config.agenda_db_id,
+            "database_id": config.agenda_db_id,  # select the database to query
             "filter": {  # get only the items that come in this rolling week
                 "property": "Date",  # edit with the name of the property to filter
                 "date": {
@@ -64,14 +65,14 @@ if config.agenda_db_id != "":  # check that the db id is filled in
         # edit 'Nom' with the name of your database
         name = item['properties']['Nom']['title'][0]['plain_text']
         print(date + " " + nb + " " + name)
-else:  # if the database ID isn't filled in
+else:  # if the database ID is not filled
     print("Please configure your database ID 'agenda_db_id' in your config file")
 
 
-if config.meds_db_id != "":  # check that the db id is filled in
-    meds_refill = notion.databases.query(
+if config.meds_db_id != "":  # check that the database ID is filled
+    meds_refill = notion.databases.query(  # query to the notion API
         **{
-            "database_id": config.meds_db_id,
+            "database_id": config.meds_db_id,  # select the database to query
             "filter": {  # get only the elements that need to be restocked
                 "property": "Refill",
                 "checkbox": {
