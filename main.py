@@ -3,11 +3,14 @@
 import os
 import notion_client
 from notion_client import Client
-from datetime import date
+from datetime import date, timedelta
 import config
 
 # debug
 from pprint import pprint
+
+
+today = date.today()
 
 
 # init the notion token
@@ -20,19 +23,29 @@ else:  # if the notion token isn't filled
 
 # get and print today's date (without year)
 if config.show_date:  # if 'show_date' is true in the configuration file, display the current date
-    today = date.today()
     print(today.strftime("%d/%m"))
 
 
 if config.agenda_db_id != "":  # check that the database ID is filled
+    inaweek = today + timedelta(days = 7)  # edit the number of days if you want
     next_events = notion.databases.query(  # query to the notion API
         **{
             "database_id": config.agenda_db_id,  # select the database to query
             "filter": {  # get only the items that come in this rolling week
-                "property": "Date",  # edit with the name of the property to filter
-                "date": {
-                    "next_week": {},  # Date filter condition: https://developers.notion.com/reference/post-database-query#date-filter-condition
-                },
+                "and": [  # we want to satisfy the 2 conditions
+                    {
+                        "property": "Date",  # edit with the name of the property to filter
+                        "date": {  # we want the current and future items
+                            "on_or_after": today.strftime("%Y-%m-%d"),  # Date filter condition: https://developers.notion.com/reference/post-database-query#date-filter-condition
+                        },
+                    },
+                    {
+                        "property": "Date",  # edit with the name of the property to filter
+                        "date":   {# we want the items in a week and before
+                            "on_or_before": inaweek.strftime("%Y-%m-%d"),  # Date filter condition: https://developers.notion.com/reference/post-database-query#date-filter-condition
+                        },
+                    },
+                ]
             },
             "sorts": [  # sort items from nearest to farthest
                 {
