@@ -4,7 +4,6 @@ import os
 import notion_client
 from notion_client import Client
 from datetime import date
-#import json
 import config
 
 # debug
@@ -45,7 +44,17 @@ if config.agenda_db_id != "": # check that the db id is filled in
     # print all items that come in this rolling week
     for item in next_events['results']:
         date = item['properties']['Date']['date']['start'] + " " # edit 'Date' with the name of the property of your database
+        if date.find("T") != -1:
+            date = date[5:len(date)-14] + " "
+        elif date.find("T") == -1:
+            date = date[5:]
         nb = item['properties']['Nb Jours']['formula']['string'] + " " # edit 'Nb Jours' with the name of your database
+        if nb.find("Dans") == 0: # if 'Dans' is found in the 'nb' variable
+            nb = nb[5:len(nb)-7] + " j "
+        elif nb.find("🚨 Aujourd’hui") == 0: # if 'Aujourd’hui' is found in the 'nb' variable
+            nb = "ajd "
+        elif nb.find("⚠️ Demain") == 0:
+            nb = "dem "
         name = item['properties']['Nom']['title'][0]['plain_text'] # edit 'Nom' with the name of your database
         print(date + nb + name)
 else: # if the db id isn't filled in
