@@ -4,7 +4,7 @@ import os
 import notion_client
 from notion_client import Client
 from datetime import date
-import json
+#import json
 import config
 
 # debug
@@ -29,14 +29,25 @@ if config.agenda_db_id != "": # check that the db id is filled in
         **{
             "database_id": config.agenda_db_id,
             "filter": { # get only the items that come in this rolling week
-                "property": "Date",
+                "property": "Date", # edit with the name of the property to filter
                 "date": {
-                    "next_week": {},
+                    "next_week": {}, # Date filter condition: https://developers.notion.com/reference/post-database-query#date-filter-condition
                 },
             },
+            "sorts": [ # sort items from nearest to farthest
+            {
+            "property": "Date", # edit with the name of the property to sort against
+            "direction": "ascending",
+            },
+            ]
         }
     )
-    pprint(next_events)
+    # print all items that come in this rolling week
+    for item in next_events['results']:
+        date = item['properties']['Date']['date']['start'] + " " # edit 'Date' with the name of the property of your database
+        nb = item['properties']['Nb Jours']['formula']['string'] + " " # edit 'Nb Jours' with the name of your database
+        name = item['properties']['Nom']['title'][0]['plain_text'] # edit 'Nom' with the name of your database
+        print(date + nb + name)
 else: # if the db id isn't filled in
     print("Please configure your database ID 'agenda_db_id' in your config file")
 
