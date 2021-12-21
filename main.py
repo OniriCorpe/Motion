@@ -48,9 +48,8 @@ if config.agenda_db_id != "":  # check that the db id is filled in
         if "T" in date:  # if hour data
             date_day = date[8:len(date)-19]  # get day
             date_month = date[5:len(date)-22]  # get month
-            date_day_month = date_day + "/" + date_month + " "  # combine day and month
-            date_hour = date[11:len(date)-13] + " "  # get hour
-            date = date_day_month + date_hour  # combine day & month and hour
+            date_hour = date[11:len(date)-13]  # get hour
+            date = date_day + "/" + date_month + " " + date_hour + " "  # combine day, month and hour
         elif "T" not in date:  # if not hour data
             date_day = date[8:]  # get day
             date_month = date[5:7]  # get month
