@@ -45,26 +45,25 @@ if config.agenda_db_id != "":  # check that the db id is filled in
     for item in next_events['results']:
         # edit 'Date' with the name of the property of your database
         date = item['properties']['Date']['date']['start']
-        if "T" in date:  # if hour data
+        if "T" in date:  # check if 'date' has hour data
             date_day = date[8:len(date)-19]  # get day
             date_month = date[5:len(date)-22]  # get month
             date_hour = date[11:len(date)-13]  # get hour
-            date = date_day + "/" + date_month + " " + date_hour + " "  # combine day, month and hour
-        elif "T" not in date:  # if not hour data
+            date = date_day + "/" + date_month + " " + date_hour  # combine day, month and hour
+        elif "T" not in date:  # check if 'date' has no hour data
             date_day = date[8:]  # get day
             date_month = date[5:7]  # get month
-            date = date_day + "/" + date_month + " "  # combine day and month
-        nb = item['properties']['Nb Jours']['formula']['string'] + \
-            " "  # edit 'Nb Jours' with the name of your database
+            date = date_day + "/" + date_month  # combine day and month
+        nb = item['properties']['Nb Jours']['formula']['string']  # edit 'Nb Jours' with the name in your database
         if "Dans" in nb:  # if 'Dans' is found in the 'nb' variable
-            nb = nb[5:len(nb)-7] + " j "
+            nb = nb[5:len(nb)-6] + " j"
         elif "Aujourd’hui" in nb:  # if 'Aujourd’hui' is found in the 'nb' variable
-            nb = "ajd "
+            nb = "ajd"
         elif "Demain" in nb:
-            nb = "dem "
+            nb = "dem"
         # edit 'Nom' with the name of your database
         name = item['properties']['Nom']['title'][0]['plain_text']
-        print(date + nb + name)
+        print(date + " " + nb + " " + name)
 else:  # if the database ID isn't filled in
     print("Please configure your database ID 'agenda_db_id' in your config file")
 
