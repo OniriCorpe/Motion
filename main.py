@@ -120,10 +120,15 @@ if config.meds_db_id != "":  # check that the database ID is filled
         }
     )
     # print all the elements that need to be restocked
-    for item in meds['results']:
-        # edit 'Nom' and 'NbRefill' with the name of the property of your database
-        # get item name
-        name_meds = item['properties']['Nom']['title'][0]['plain_text']
-        # get the minimum number of units to be restocked
-        nb_refill = item['properties']['NbRefill']['formula']['number']
-        pprint(name_meds + " : ≥" + str(nb_refill))
+    if meds['results']:
+        for item in meds['results']:
+            # edit 'Nom' and 'NbRefill' with the name of the property of your database
+            # get item name
+            name_meds = item['properties']['Nom']['title'][0]['plain_text']
+            # get the minimum number of units to be restocked
+            nb_refill = item['properties']['NbRefill']['formula']['number']
+            refill = True
+            pprint(name_meds + " : ≥" + str(nb_refill))
+    else:
+        refill = False
+        print("rien à restock")
