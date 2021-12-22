@@ -129,6 +129,6 @@ if config.meds_db_id != "":  # check that the database ID is filled
             nb_refill = item['properties']['NbRefill']['formula']['number']
             refill = True
             pprint(name_meds + " : ≥" + str(nb_refill))
-    else:
+    else:  # there is no item to restock
         refill = False
         print("rien à restock")
