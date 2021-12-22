@@ -61,12 +61,12 @@ if config.agenda_db_id != "":  # check that the database ID is filled
     # print all items that come in this rolling week
     for item in next_events['results']:
         # edit 'Date' with the name of the property of your database
-        # get item starting
+        # get item starting date
         date_start = item['properties']['Date']['date']['start']
         if "T" in date_start:  # check if 'date' has hour data
-            date_day = date_start[8:len(date)-19]  # get day
-            date_month = date_start[5:len(date)-22]  # get month
-            date_hour = date_start[11:len(date)-13]  # get hour
+            date_day = date_start[8:len(date_start)-19]  # get day
+            date_month = date_start[5:len(date_start)-22]  # get month
+            date_hour = date_start[11:len(date_start)-13]  # get hour
             date_start = date_day + "/" + date_month + " " + \
                 date_hour  # combine day, month and hour
         elif "T" not in date_start:  # check if 'date' has no hour data
@@ -74,12 +74,13 @@ if config.agenda_db_id != "":  # check that the database ID is filled
             date_month = date_start[5:7]  # get month
             date_start = date_day + "/" + date_month  # combine day and month
         # edit 'Date' with the name of the property of your database
-        date_end = item['properties']['Date']['date']['end']  # get item ending
+        # get item ending date
+        date_end = item['properties']['Date']['date']['end']
         if date_end is not None:  # if there is an end date
             if "T" in date_end:  # check if 'date' has hour data
-                date_day = date_end[8:len(date)-19]  # get day
-                date_month = date_end[5:len(date)-22]  # get month
-                date_hour = date_end[11:len(date)-13]  # get hour
+                date_day = date_end[8:len(date_end)-19]  # get day
+                date_month = date_end[5:len(date_end)-22]  # get month
+                date_hour = date_end[11:len(date_end)-13]  # get hour
                 date_end = date_day + "/" + date_month + " " + \
                     date_hour  # combine day, month and hour
             elif "T" not in date_end:  # check if 'date' has no hour data
