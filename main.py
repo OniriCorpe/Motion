@@ -108,7 +108,7 @@ else:  # if the database ID is not filled
 
 
 if config.meds_db_id != "":  # check that the database ID is filled
-    meds_refill = notion.databases.query(  # query to the notion API
+    meds = notion.databases.query(  # query to the notion API
         **{
             "database_id": config.meds_db_id,  # select the database to query
             "filter": {  # get only the elements that need to be restocked
@@ -119,4 +119,11 @@ if config.meds_db_id != "":  # check that the database ID is filled
             },
         }
     )
-    pprint(meds_refill)
+    # print all the elements that need to be restocked
+    for item in meds['results']:
+        # edit 'Nom' and 'NbRefill' with the name of the property of your database
+        # get item name
+        name_meds = item['properties']['Nom']['title'][0]['plain_text']
+        # get the minimum number of units to be restocked
+        nb_refill = item['properties']['NbRefill']['formula']['number']
+        pprint(name_meds + " : ≥" + str(nb_refill))
