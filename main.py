@@ -4,6 +4,7 @@ import os
 import notion_client
 from notion_client import Client
 from datetime import date, timedelta
+from peewee import *
 import config
 
 # debug
@@ -11,6 +12,34 @@ from pprint import pprint
 
 
 today = date.today()
+
+#  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
+db = SqliteDatabase('data.db', pragmas=(
+    ('cache_size', -1024 * 2),  # 2MB page-cache.
+    ('journal_mode', 'wal')))  # Use WAL-mode
+
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class next_events(BaseModel):
+    name = CharField()
+    date_start = DateField()
+    date_end = DateField()
+    id = CharField(unique=True)
+
+
+class meds(BaseModel):
+    name = CharField()
+    nb_refill = DecimalField()
+    refill = BooleanField()
+    id = CharField(unique=True)
+
+
+db.connect()
+db.create_tables([next_events, meds])
 
 
 # init the notion token
@@ -64,9 +93,9 @@ if config.agenda_db_id != "":  # check that the database ID is filled
         # get item starting date
         date_start = item['properties']['Date']['date']['start']
         if "T" in date_start:  # check if 'date' has hour data
-            date_day = date_start[8:len(date_start)-19]  # get day
-            date_month = date_start[5:len(date_start)-22]  # get month
-            date_hour = date_start[11:len(date_start)-13]  # get hour
+            date_day = date_start[8:-19]  # get day
+            date_month = date_start[5:-22]  # get month
+            date_hour = date_start[11:-13]  # get hour
             date_start = date_day + "/" + date_month + " " + \
                 date_hour  # combine day, month and hour
         elif "T" not in date_start:  # check if 'date' has no hour data
@@ -78,9 +107,9 @@ if config.agenda_db_id != "":  # check that the database ID is filled
         date_end = item['properties']['Date']['date']['end']
         if date_end is not None:  # if there is an end date
             if "T" in date_end:  # check if 'date' has hour data
-                date_day = date_end[8:len(date_end)-19]  # get day
-                date_month = date_end[5:len(date_end)-22]  # get month
-                date_hour = date_end[11:len(date_end)-13]  # get hour
+                date_day = date_end[8:-19]  # get day
+                date_month = date_end[5:-22]  # get month
+                date_hour = date_end[11:-13]  # get hour
                 date_end = date_day + "/" + date_month + " " + \
                     date_hour  # combine day, month and hour
             elif "T" not in date_end:  # check if 'date' has no hour data
@@ -92,7 +121,7 @@ if config.agenda_db_id != "":  # check that the database ID is filled
         # edit 'Nb Jours' with the name in your database
         nb = item['properties']['Nb Jours']['formula']['string']
         if "Dans" in nb:  # if 'Dans' is found in the 'nb' variable
-            nb = nb[5:len(nb)-6] + " j"
+            nb = nb[5:-6] + " j"
         elif "Aujourd’hui" in nb:  # if 'Aujourd’hui' is found in the 'nb' variable
             nb = "ajd"
         elif "Demain" in nb:
@@ -132,3 +161,5 @@ if config.meds_db_id != "":  # check that the database ID is filled
     else:  # there is no item to restock
         refill = False
         print("rien à restock")
+
+# please note that i'm gay
