@@ -53,16 +53,16 @@ else:  # if the notion token isn't filled
 
 
 # get and print today's date (without year)
-if config.show_date:  # if 'show_date' is true in the configuration file, display the current date
+if config.SHOW_DATE:  # if 'show_date' is true in the configuration file, display the current date
     print(today.strftime("%d/%m"))
 
 
-if config.agenda_db_id != "":  # check that the database ID is filled
+if config.AGENDA_DB_ID != "":  # check that the database ID is filled
     # edit the number of days if you want
     inaweek = today + timedelta(days = 7)
     next_events = notion.databases.query(  # query to the notion API
         **{
-            "database_id": config.agenda_db_id,  # select the database to query
+            "database_id": config.AGENDA_DB_ID,  # select the database to query
             "filter": {  # get only the items that come in this rolling week
                 "and": [  # we want to satisfy the 2 conditions
                     {
@@ -140,10 +140,10 @@ else:  # if the database ID is not filled
     print("Please configure your database ID 'agenda_db_id' in your config file")
 
 
-if config.meds_db_id != "":  # check that the database ID is filled
+if config.MEDS_DB_ID != "":  # check that the database ID is filled
     meds = notion.databases.query(  # query to the notion API
         **{
-            "database_id": config.meds_db_id,  # select the database to query
+            "database_id": config.MEDS_DB_ID,  # select the database to query
             "filter": {  # get only the elements that need to be restocked
                 "property": "Refill",
                 "checkbox": {

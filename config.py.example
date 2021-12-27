@@ -1,14 +1,25 @@
 #!/usr/bin/env python
 
+"""
+This is the example configuration file.
+Please copy it and rename it to 'config.py' and then complete it with your
+Notion Token, your database IDs and adjust the settings if you want.
+"""
+
 # get your token: https://developers.notion.com/docs/getting-started
 NOTION_TOKEN = ""
 
-# get the database id: https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
-# get the database template: https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
-agenda_db_id = ""
+# get the database id:
+# https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
+# get the database template:
+# https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
+AGENDA_DB_ID = ""
 
 
-# optional stuff
-show_date = True
-# get the database template: https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
-meds_db_id = ""
+# optional stuff:
+
+SHOW_DATE = True
+
+# get the database template:
+# https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
+MEDS_DB_ID = ""
