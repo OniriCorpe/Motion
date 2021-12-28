@@ -9,39 +9,40 @@ Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 from datetime import date, timedelta
 from pprint import pprint  # debug
 from notion_client import Client
-from peewee import *
+import peewee
 import config
 
 
 today = date.today()
 
+
 #  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
-db = SqliteDatabase('data.db', pragmas=(
+db = peewee.SqliteDatabase('data.db', pragmas=(
     ('cache_size', -1024 * 2),  # 2MB page-cache.
     ('journal_mode', 'wal')))  # Use WAL-mode
 
 
-class BaseModel(Model):
+class BaseModel(peewee.Model):
     class Meta:
         database = db
 
 
-class next_events(BaseModel):
-    name = CharField()
-    date_start = DateField()
-    date_end = DateField()
-    id = CharField(unique=True)
+class NextEvents(BaseModel):
+    name = peewee.CharField()
+    date_start = peewee.DateField()
+    date_end = peewee.DateField()
+    id = peewee.CharField(unique=True)
 
 
-class meds(BaseModel):
-    name = CharField()
-    nb_refill = DecimalField()
-    refill = BooleanField()
-    id = CharField(unique=True)
+class Meds(BaseModel):
+    name = peewee.CharField()
+    nb_refill = peewee.DecimalField()
+    refill = peewee.BooleanField()
+    id = peewee.CharField(unique=True)
 
 
 db.connect()
-db.create_tables([next_events, meds])
+db.create_tables([NextEvents, Meds])
 
 
 # init the notion token
@@ -53,7 +54,8 @@ else:  # if the notion token isn't filled
 
 
 # get and print today's date (without year)
-if config.SHOW_DATE:  # if 'show_date' is true in the configuration file, display the current date
+# if 'show_date' is true in the configuration file, display the current date
+if config.SHOW_DATE:
     print(today.strftime("%d/%m"))
 
 
@@ -123,21 +125,24 @@ if config.AGENDA_DB_ID != "":  # check that the database ID is filled
         else:  # if there is not an end date
             date_end = False
         # edit 'Nb Jours' with the name in your database
-        nb = item['properties']['Nb Jours']['formula']['string']
-        if "Dans" in nb:  # if 'Dans' is found in the 'nb' variable
-            nb = nb[5:-6] + " j"
-        elif "Aujourd’hui" in nb:  # if 'Aujourd’hui' is found in the 'nb' variable
-            nb = "ajd"
-        elif "Demain" in nb:
-            nb = "dem"
+        number_of_days_before = item['properties']['Nb Jours']['formula']['string']
+        # if 'Dans' is found in the 'number_of_days_before' variable
+        if "Dans" in number_of_days_before:
+            number_of_days_before = number_of_days_before[5:-6] + " j"
+        # if 'Aujourd’hui' is found in the 'number_of_days_before' variable
+        elif "Aujourd’hui" in number_of_days_before:
+            number_of_days_before = "ajd"
+        elif "Demain" in number_of_days_before:
+            number_of_days_before = "dem"
         # edit 'Nom' with the name of your database
         name = item['properties']['Nom']['title'][0]['plain_text']
         if date_end is False:  # if there is not an end date
-            print(date_start + " " + nb + " " + name)
+            print(date_start + " " + number_of_days_before + " " + name)
         else:  # if there is an end date
-            print(date_start[:2] + "-" + date_end + " " + nb + " " + name)
+            print(date_start[:2] + "-" + date_end + " "
+                  + number_of_days_before + " " + name)
 else:  # if the database ID is not filled
-    print("Please configure your database ID 'agenda_db_id' in your config file")
+    print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
 
 if config.MEDS_DB_ID != "":  # check that the database ID is filled
