@@ -45,12 +45,27 @@ db.connect()
 db.create_tables([NextEvents, Meds])
 
 
-# init the notion token
-# get your token: https://developers.notion.com/docs/getting-started
-if config.NOTION_TOKEN != "":  # check that the notion token is filled
+def check_config(item):
+    """
+    'item': The name of the constant to check in the configuration file.
+    eg: "NOTION_TOKEN" or "AGENDA_DB_ID".
+
+    The fonction returns a boolean:
+    'True' if the constant is filled.
+    'False' if the constant is empty.
+    """
+    return getattr(config, item) != ""
+
+
+# check that the Notion token is filled
+if check_config("NOTION_TOKEN"):
+    # if there is string, trying to init the Notion token with it
     notion = Client(auth=config.NOTION_TOKEN)
-else:  # if the notion token isn't filled
-    print("Please configure your Notion Token")
+else:
+    # if the Notion token isn't filled, print error
+    print("Please configure your Notion Token.\n"
+    "Get your token here: https://developers.notion.com/docs/getting-started")
+    quit()  # stop the program here until a token is given
 
 
 # get and print today's date (without year)
@@ -58,8 +73,8 @@ else:  # if the notion token isn't filled
 if config.SHOW_DATE:
     print(today.strftime("%d/%m"))
 
-
-if config.AGENDA_DB_ID != "":  # check that the database ID is filled
+# check that the database ID is filled
+if check_config("AGENDA_DB_ID"):
     # edit the number of days if you want
     inaweek = today + timedelta(days = 7)
     next_events = notion.databases.query(  # query to the notion API
@@ -144,8 +159,8 @@ if config.AGENDA_DB_ID != "":  # check that the database ID is filled
 else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
-
-if config.MEDS_DB_ID != "":  # check that the database ID is filled
+# check that the database ID is filled
+if check_config("MEDS_DB_ID"):
     meds = notion.databases.query(  # query to the notion API
         **{
             "database_id": config.MEDS_DB_ID,  # select the database to query
