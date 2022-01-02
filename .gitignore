@@ -2,3 +2,4 @@ __pycache__
 motion-venv
 config.py
 data.db
+.vscode
