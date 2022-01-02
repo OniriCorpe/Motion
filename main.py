@@ -17,9 +17,12 @@ today = date.today()
 
 
 #  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
-db = peewee.SqliteDatabase('data.db', pragmas=(
-    ('cache_size', -1024 * 2),  # 2MB page-cache.
-    ('journal_mode', 'wal')))  # Use WAL-mode
+db = peewee.SqliteDatabase(
+    # name of the DB file
+    "data.db",
+    # 2MB page-cache & using WAL-mode
+    pragmas=(("cache_size", -1024 * 2), ("journal_mode", "wal")),
+)
 
 
 class BaseModel(peewee.Model):
@@ -63,8 +66,10 @@ if check_config("NOTION_TOKEN"):
     notion = Client(auth=config.NOTION_TOKEN)
 else:
     # if the Notion token isn't filled, print error
-    print("Please configure your Notion Token.\n"
-    "Get your token here: https://developers.notion.com/docs/getting-started")
+    print(
+        "Please configure your Notion Token.\n"
+        "Get your token here: https://developers.notion.com/docs/getting-started"
+    )
     quit()  # stop the program here until a token is given
 
 
@@ -76,7 +81,7 @@ if config.SHOW_DATE:
 # check that the database ID is filled
 if check_config("AGENDA_DB_ID"):
     # edit the number of days if you want
-    inaweek = today + timedelta(days = 7)
+    inaweek = today + timedelta(days=7)
     next_events = notion.databases.query(  # query to the notion API
         **{
             "database_id": config.AGENDA_DB_ID,  # select the database to query
@@ -92,7 +97,7 @@ if check_config("AGENDA_DB_ID"):
                     },
                     {
                         "property": "Date",  # edit with the name of the property to filter
-                        "date":   {  # we want the items in a week and before
+                        "date": {  # we want the items in a week and before
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
                             "on_or_before": inaweek.strftime("%Y-%m-%d"),
@@ -104,35 +109,47 @@ if check_config("AGENDA_DB_ID"):
                 {
                     "property": "Date",  # edit with the name of the property to sort against
                     "direction": "ascending",
-                    },
-            ]
+                },
+            ],
         }
     )
     # print all items that come in this rolling week
-    for item in next_events['results']:
+    for item in next_events["results"]:
         # edit 'Date' with the name of the property of your database
         # get item starting date
-        date_start = item['properties']['Date']['date']['start']
+        date_start = item["properties"]["Date"]["date"]["start"]
         if "T" in date_start:  # check if 'date' has hour data
             date_day = date_start[8:-19]  # get day
             date_month = date_start[5:-22]  # get month
             date_hour = date_start[11:-13]  # get hour
-            date_start = date_day + "/" + date_month + " " + \
-                date_hour  # combine day, month and hour
+            date_start = (
+                # combine day, month and hour
+                date_day
+                + "/"
+                + date_month
+                + " "
+                + date_hour
+            )
         elif "T" not in date_start:  # check if 'date' has no hour data
             date_day = date_start[8:]  # get day
             date_month = date_start[5:7]  # get month
             date_start = date_day + "/" + date_month  # combine day and month
         # edit 'Date' with the name of the property of your database
         # get item ending date
-        date_end = item['properties']['Date']['date']['end']
+        date_end = item["properties"]["Date"]["date"]["end"]
         if date_end is not None:  # if there is an end date
             if "T" in date_end:  # check if 'date' has hour data
                 date_day = date_end[8:-19]  # get day
                 date_month = date_end[5:-22]  # get month
                 date_hour = date_end[11:-13]  # get hour
-                date_end = date_day + "/" + date_month + " " + \
-                    date_hour  # combine day, month and hour
+                date_end = (
+                    # combine day, month and hour
+                    date_day
+                    + "/"
+                    + date_month
+                    + " "
+                    + date_hour
+                )
             elif "T" not in date_end:  # check if 'date' has no hour data
                 date_day = date_end[8:]  # get day
                 date_month = date_end[5:7]  # get month
@@ -140,7 +157,7 @@ if check_config("AGENDA_DB_ID"):
         else:  # if there is not an end date
             date_end = False
         # edit 'Nb Jours' with the name in your database
-        number_of_days_before = item['properties']['Nb Jours']['formula']['string']
+        number_of_days_before = item["properties"]["Nb Jours"]["formula"]["string"]
         # if 'Dans' is found in the 'number_of_days_before' variable
         if "Dans" in number_of_days_before:
             number_of_days_before = number_of_days_before[5:-6] + " j"
@@ -150,12 +167,19 @@ if check_config("AGENDA_DB_ID"):
         elif "Demain" in number_of_days_before:
             number_of_days_before = "dem"
         # edit 'Nom' with the name of your database
-        name = item['properties']['Nom']['title'][0]['plain_text']
+        name = item["properties"]["Nom"]["title"][0]["plain_text"]
         if date_end is False:  # if there is not an end date
             print(date_start + " " + number_of_days_before + " " + name)
         else:  # if there is an end date
-            print(date_start[:2] + "-" + date_end + " "
-                  + number_of_days_before + " " + name)
+            print(
+                date_start[:2]
+                + "-"
+                + date_end
+                + " "
+                + number_of_days_before
+                + " "
+                + name
+            )
 else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
@@ -173,13 +197,13 @@ if check_config("MEDS_DB_ID"):
         }
     )
     # print all the elements that need to be restocked
-    if meds['results']:
-        for item in meds['results']:
+    if meds["results"]:
+        for item in meds["results"]:
             # edit 'Nom' and 'NbRefill' with the name of the property of your database
             # get item name
-            name_meds = item['properties']['Nom']['title'][0]['plain_text']
+            name_meds = item["properties"]["Nom"]["title"][0]["plain_text"]
             # get the minimum number of units to be restocked
-            nb_refill = item['properties']['NbRefill']['formula']['number']
+            nb_refill = item["properties"]["NbRefill"]["formula"]["number"]
             refill = True
             pprint(name_meds + " : ≥" + str(nb_refill))
     else:  # there is no item to restock
