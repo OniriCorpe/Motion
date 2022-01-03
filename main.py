@@ -83,12 +83,11 @@ def init_notion():
     if config_has_setting(config, "NOTION_TOKEN"):
         # if there is string, trying to init the Notion token with it
         return Client(auth=config.NOTION_TOKEN)
-    else:
-        # if the Notion token isn't filled, print error and stop the program
-        sys.exit(
-            "Please configure your Notion token.\n"
-            "Get your token here: https://developers.notion.com/docs/getting-started"
-        )
+    # if the Notion token isn't filled, print error and stop the program
+    sys.exit(
+        "Please configure your Notion token.\n"
+        "Get your token here: https://developers.notion.com/docs/getting-started"
+    )
 
 
 def show_current_date():
