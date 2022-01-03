@@ -124,16 +124,12 @@ if check_config("AGENDA_DB_ID"):
             date_hour = date_start[11:-13]  # get hour
             date_start = (
                 # combine day, month and hour
-                date_day
-                + "/"
-                + date_month
-                + " "
-                + date_hour
+                f"{date_day}/{date_month} {date_hour}"
             )
         elif "T" not in date_start:  # check if 'date' has no hour data
             date_day = date_start[8:]  # get day
             date_month = date_start[5:7]  # get month
-            date_start = date_day + "/" + date_month  # combine day and month
+            date_start = f"{date_day}/{date_month}"  # combine day and month
         # edit 'Date' with the name of the property of your database
         # get item ending date
         date_end = item["properties"]["Date"]["date"]["end"]
@@ -144,16 +140,12 @@ if check_config("AGENDA_DB_ID"):
                 date_hour = date_end[11:-13]  # get hour
                 date_end = (
                     # combine day, month and hour
-                    date_day
-                    + "/"
-                    + date_month
-                    + " "
-                    + date_hour
+                    f"{date_day}/{date_month} {date_hour}"
                 )
             elif "T" not in date_end:  # check if 'date' has no hour data
                 date_day = date_end[8:]  # get day
                 date_month = date_end[5:7]  # get month
-                date_end = date_day + "/" + date_month  # combine day and month
+                date_end = f"{date_day}/{date_month}"  # combine day and month
         else:  # if there is not an end date
             date_end = False
         # edit 'Nb Jours' with the name in your database
@@ -169,16 +161,10 @@ if check_config("AGENDA_DB_ID"):
         # edit 'Nom' with the name of your database
         name = item["properties"]["Nom"]["title"][0]["plain_text"]
         if date_end is False:  # if there is not an end date
-            print(date_start + " " + number_of_days_before + " " + name)
+            print(f"{date_start} {number_of_days_before} {name}")
         else:  # if there is an end date
             print(
-                date_start[:2]
-                + "-"
-                + date_end
-                + " "
-                + number_of_days_before
-                + " "
-                + name
+                f"{date_start}-{date_end} {number_of_days_before} {name}"
             )
 else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
@@ -205,7 +191,7 @@ if check_config("MEDS_DB_ID"):
             # get the minimum number of units to be restocked
             nb_refill = item["properties"]["NbRefill"]["formula"]["number"]
             refill = True
-            pprint(name_meds + " : ≥" + str(nb_refill))
+            pprint(f"{name_meds} : ≥{str(nb_refill)}")
     else:  # there is no item to restock
         refill = False
         print("rien à restock")
