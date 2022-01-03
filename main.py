@@ -191,7 +191,7 @@ if check_config("MEDS_DB_ID"):
             # get the minimum number of units to be restocked
             nb_refill = item["properties"]["NbRefill"]["formula"]["number"]
             refill = True
-            pprint(f"{name_meds} : ≥{str(nb_refill)}")
+            pprint(f"{name_meds} : ≥{nb_refill}")
     else:  # there is no item to restock
         refill = False
         print("rien à restock")
