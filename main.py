@@ -14,7 +14,6 @@ import peewee
 import config
 
 
-today = date.today()
 
 
 #  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
@@ -57,6 +56,11 @@ db.connect()
 db.create_tables([NextEvents, Meds])
 
 
+def get_current_date():
+    """Return the current date."""
+    return date.today()
+
+
 def config_has_setting(config_file, config_item):
     """
     Arguments:
@@ -71,28 +75,43 @@ def config_has_setting(config_file, config_item):
     return getattr(config_file, config_item) != ""
 
 
-# check that the Notion token is filled
-if config_has_setting(config, "NOTION_TOKEN"):
-    # if there is string, trying to init the Notion token with it
-    notion = Client(auth=config.NOTION_TOKEN)
-else:
-    # if the Notion token isn't filled, print error and stop the program
-    sys.exit(
-        "Please configure your Notion token.\n"
-        "Get your token here: https://developers.notion.com/docs/getting-started"
-    )
+def init_notion():
+    """
+    Return the Notion client initialized with the token
+    or exit the program if there is no token.
+    """
+
+    # check that the Notion token is filled
+    if config_has_setting(config, "NOTION_TOKEN"):
+        # if there is string, trying to init the Notion token with it
+        return Client(auth=config.NOTION_TOKEN)
+    else:
+        # if the Notion token isn't filled, print error and stop the program
+        sys.exit(
+            "Please configure your Notion token.\n"
+            "Get your token here: https://developers.notion.com/docs/getting-started"
+        )
 
 
-# get and print today's date (without year)
-# if 'show_date' is true in the configuration file, display the current date
-if config.SHOW_DATE:
-    print(today.strftime("%d/%m"))
+def show_current_date():
+    """
+    If 'SHOW_DATE' is True in the configuration file, print the current date formated.
+    """
+
+    # get and print today's date (without year)
+    # if 'show_date' is true in the configuration file, display the current date
+    if config.SHOW_DATE:
+        print(get_current_date().strftime("%d/%m"))
+
+
+show_current_date()
+
 
 # check that the database ID is filled
 if config_has_setting(config, "AGENDA_DB_ID"):
     # edit the number of days if you want
-    inaweek = today + timedelta(days=7)
-    next_events = notion.databases.query(  # query to the notion API
+    inaweek = get_current_date() + timedelta(days=7)
+    next_events = init_notion().databases.query(  # query to the notion API
         **{
             "database_id": config.AGENDA_DB_ID,  # select the database to query
             "filter": {  # get only the items that come in this rolling week
@@ -102,7 +121,7 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                         "date": {  # we want the current and future items
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
-                            "on_or_after": today.strftime("%Y-%m-%d"),
+                            "on_or_after": get_current_date().strftime("%Y-%m-%d"),
                         },
                     },
                     {
@@ -179,7 +198,7 @@ else:  # if the database ID is not filled
 
 # check that the database ID is filled
 if config_has_setting(config, "MEDS_DB_ID"):
-    meds = notion.databases.query(  # query to the notion API
+    meds = init_notion().databases.query(  # query to the notion API
         **{
             "database_id": config.MEDS_DB_ID,  # select the database to query
             "filter": {  # get only the elements that need to be restocked
@@ -198,10 +217,8 @@ if config_has_setting(config, "MEDS_DB_ID"):
             name_meds = item["properties"]["Nom"]["title"][0]["plain_text"]
             # get the minimum number of units to be restocked
             nb_refill = item["properties"]["NbRefill"]["formula"]["number"]
-            refill = True
             pprint(f"{name_meds} : ≥{nb_refill}")
     else:  # there is no item to restock
-        refill = False
         print("rien à restock")
 
 # please note that i'm gay
