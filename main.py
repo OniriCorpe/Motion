@@ -57,8 +57,10 @@ db.connect()
 db.create_tables([NextEvents, Meds])
 
 
-def config_has_setting(config_item):
+def config_has_setting(config_file, config_item):
     """
+    Arguments:
+    'config_file': The configuration file to check. Default: 'config'.
     'config_item': The name of the constant to check in the configuration file.
     eg: "NOTION_TOKEN" or "AGENDA_DB_ID".
 
@@ -66,11 +68,11 @@ def config_has_setting(config_item):
     'True' if the constant is filled.
     'False' if the constant is empty.
     """
-    return getattr(config, config_item) != ""
+    return getattr(config_file, config_item) != ""
 
 
 # check that the Notion token is filled
-if config_has_setting("NOTION_TOKEN"):
+if config_has_setting(config, "NOTION_TOKEN"):
     # if there is string, trying to init the Notion token with it
     notion = Client(auth=config.NOTION_TOKEN)
 else:
@@ -87,7 +89,7 @@ if config.SHOW_DATE:
     print(today.strftime("%d/%m"))
 
 # check that the database ID is filled
-if config_has_setting("AGENDA_DB_ID"):
+if config_has_setting(config, "AGENDA_DB_ID"):
     # edit the number of days if you want
     inaweek = today + timedelta(days=7)
     next_events = notion.databases.query(  # query to the notion API
@@ -176,7 +178,7 @@ else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
 # check that the database ID is filled
-if config_has_setting("MEDS_DB_ID"):
+if config_has_setting(config, "MEDS_DB_ID"):
     meds = notion.databases.query(  # query to the notion API
         **{
             "database_id": config.MEDS_DB_ID,  # select the database to query
