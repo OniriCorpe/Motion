@@ -163,9 +163,7 @@ if check_config("AGENDA_DB_ID"):
         if date_end is False:  # if there is not an end date
             print(f"{date_start} {number_of_days_before} {name}")
         else:  # if there is an end date
-            print(
-                f"{date_start}-{date_end} {number_of_days_before} {name}"
-            )
+            print(f"{date_start}-{date_end} {number_of_days_before} {name}")
 else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
