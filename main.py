@@ -6,6 +6,7 @@ mall  -ink screen (Pimoroni's Inky Phat) connected to a Raspberry Pi Zero W."
 Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 """
 
+import sys
 from datetime import date, timedelta
 from pprint import pprint  # debug
 from notion_client import Client
@@ -65,12 +66,11 @@ if check_config("NOTION_TOKEN"):
     # if there is string, trying to init the Notion token with it
     notion = Client(auth=config.NOTION_TOKEN)
 else:
-    # if the Notion token isn't filled, print error
-    print(
-        "Please configure your Notion Token.\n"
+    # if the Notion token isn't filled, print error and stop the program
+    sys.exit(
+        "Please configure your Notion token.\n"
         "Get your token here: https://developers.notion.com/docs/getting-started"
     )
-    quit()  # stop the program here until a token is given
 
 
 # get and print today's date (without year)
