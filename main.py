@@ -14,8 +14,6 @@ import peewee
 import config
 
 
-
-
 #  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
 db = peewee.SqliteDatabase(
     # name of the DB file
