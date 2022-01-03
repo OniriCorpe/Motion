@@ -27,11 +27,17 @@ db = peewee.SqliteDatabase(
 
 
 class BaseModel(peewee.Model):
-    class Meta:
+    """The base model for the other models, adds common parameters to them"""
+
+    class Meta:  # pylint: disable=[R0903]
+        """Declaration of which database is to be used"""
+
         database = db
 
 
 class NextEvents(BaseModel):
+    """Declaration of what the database contains for NextEvents"""
+
     name = peewee.CharField()
     date_start = peewee.DateField()
     date_end = peewee.DateField()
@@ -39,6 +45,8 @@ class NextEvents(BaseModel):
 
 
 class Meds(BaseModel):
+    """Declaration of what the database contains for Meds"""
+
     name = peewee.CharField()
     nb_refill = peewee.DecimalField()
     refill = peewee.BooleanField()
