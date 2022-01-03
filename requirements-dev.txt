@@ -1,3 +1,6 @@
 notion-client
 peewee
 inky
+black
+pytest
+ipython
