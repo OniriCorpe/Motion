@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import main
-from tests.config import config
+from tests import config
 
 def test_config_has_setting():
     assert main.config_has_setting(config, "AGENDA_DB_ID") == False
