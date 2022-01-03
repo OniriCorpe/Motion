@@ -49,16 +49,16 @@ db.connect()
 db.create_tables([NextEvents, Meds])
 
 
-def config_has_setting(item):
+def config_has_setting(config_item):
     """
-    'item': The name of the constant to check in the configuration file.
+    'config_item': The name of the constant to check in the configuration file.
     eg: "NOTION_TOKEN" or "AGENDA_DB_ID".
 
     The fonction returns a boolean:
     'True' if the constant is filled.
     'False' if the constant is empty.
     """
-    return getattr(config, item) != ""
+    return getattr(config, config_item) != ""
 
 
 # check that the Notion token is filled
