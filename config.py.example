@@ -9,44 +9,57 @@ Notion Token, your database IDs and adjust the settings if you want.
 # get your token: https://developers.notion.com/docs/getting-started
 NOTION_TOKEN = ""
 
-# get the database id:
-# https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
-# get the database template:
-# https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
-AGENDA_DB_ID = ""
-# Number of rolling days from today to retrieve future events. Default: 7 (one week)
-AGENDA_NUMBER_OF_DAYS = 7
-# Name of the database's column wich show the name of your events
-AGENDA_NAME = "Nom"
-# Name of the database's column wich show the date of your events
-AGENDA_DATE = "Date"
-# Name of the database's column wich show the remaining number of days before of your events
-AGENDA_REMAINING_DAYS = "Nb Jours"
-# A word that comes out of the formula in the "Nb Days" column for an event that will take place in several days
-AGENDA_FILTER_IN_DAYS = "Dans"
-# A word that comes out of the formula in the "Nb Days" column for an event that takes place today
-AGENDA_FILTER_TODAY = "Aujourd’hui"
-# A word that comes out of the formula in the "Nb Days" column for an event that will take place tomorrow
-AGENDA_FILTER_TOMORROW = "Demain"
-# Short for "days". E.g.: " d"
-AGENDA_IN_DAYS = " j"
-# Short for "today". E.g.: "tdy" or "2da"
-AGENDA_TODAY = "ajd"
-# Short for "tomorrow". E.g.: "tmr" or "tom"
-AGENDA_TOMORROW = "dem"
+
+AGENDA = {
+    # get the database ID:
+    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
+    # get the database template:
+    # https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
+    "DB_ID": "",
+    # AGENDA_DB_ID: "",
+    # Number of rolling days from today to retrieve future events. Default: 7 (one week)
+    "NUMBER_OF_DAYS": 7,
+    # Name of the database's column wich show the name of your events
+    "NAME": "Nom",
+    # Name of the database's column wich show the date of your events
+    "DATE": "Date",
+    # Name of the database's column wich show the remaining number of days
+    # before of your events
+    "REMAINING_DAYS": "Nb Jours",
+    # A word that comes out of the formula in the "Nb Days" column for an event
+    # that will take place in several days
+    "FILTER_IN_DAYS": "Dans",
+    # A word that comes out of the formula in the "Nb Days" column for an event
+    # that takes place today
+    "FILTER_TODAY": "Aujourd’hui",
+    # A word that comes out of the formula in the "Nb Days" column for an event
+    # that will take place tomorrow
+    "FILTER_TOMORROW": "Demain",
+    # Short for "days". E.g.: " d"
+    "IN_DAYS": " j",
+    # Short for "today". E.g.: "tdy" or "2da"
+    "TODAY": "ajd",
+    # Short for "tomorrow". E.g.: "tmr" or "tom"
+    "TOMORROW": "dem",
+}
 
 
 # optional stuff:
-
 SHOW_DATE = False
 
 
-# get the database template:
-# https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
-MEDS_DB_ID = ""
-# Name of the database's column wich show the checkboxes indicates a refill is needed
-MEDS_REFILL = "Refill"
-# Name of the database's column wich show the name of your medicine stuff
-MEDS_NAME = "Nom"
-# Name of the database's column wich show the number of units to be restocked
-MEDS_NUMBER = "NbRefill"
+
+MEDS = {
+    # get the database ID:
+    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
+    # get the database template:
+    # https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
+    "DB_ID": "",
+    # MEDS_DB_ID: "",
+    # Name of the database's column wich show the checkboxes indicates a refill is needed
+    "REFILL": "Refill",
+    # Name of the database's column wich show the name of your medicine stuff
+    "NAME": "Nom",
+    # Name of the database's column wich show the number of units to be restocked
+    "NUMBER": "NbRefill",
+}
