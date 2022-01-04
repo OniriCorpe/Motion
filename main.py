@@ -54,18 +54,13 @@ db.connect()
 db.create_tables([NextEvents, Meds])
 
 
-def get_current_date():
-    """Return the current date."""
-    return date.today()
-
-
 def current_date_timedelta():
     """
     Calculates the current date to which a certain number of days defined
     in the configuration file (NUMBER_OF_DAYS) is added.
     """
 
-    return get_current_date() + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
+    return date.today() + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
 
 
 def init_notion():
@@ -93,7 +88,7 @@ def show_current_date():
     # get and print today's date (without year)
     # if 'show_date' is true in the configuration file, display the current date
     if cfg.SHOW_DATE:
-        print(get_current_date().strftime("%d/%m"))
+        print(date.today().strftime("%d/%m"))
 
 
 show_current_date()
@@ -112,7 +107,7 @@ if cfg.AGENDA["DB_ID"] != "":
                         "date": {  # we want the current and future items
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
-                            "on_or_after": get_current_date().strftime("%Y-%m-%d"),
+                            "on_or_after": date.today().strftime("%Y-%m-%d"),
                         },
                     },
                     {
