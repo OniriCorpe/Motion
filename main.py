@@ -63,7 +63,7 @@ def current_date_timedelta():
     return date.today() + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
 
 
-def init_notion():
+def init_notion_token():
     """
     Return the Notion client initialized with the token
     or exit the program if there is no token.
@@ -99,7 +99,7 @@ def agenda_retrieve():
     Retrieves data from the "AGENDA" database from the Notion API.
     """
 
-    return init_notion().databases.query(  # query to the notion API
+    return init_notion_token().databases.query(  # query to the notion API
         **{
             "database_id": cfg.AGENDA["DB_ID"],  # select the database to query
             "filter": {  # get only the items that come in this rolling week
@@ -202,7 +202,7 @@ def meds_retrieve():
     Retrieves data from the "MEDS" database from the Notion API.
     """
 
-    return init_notion().databases.query(  # query to the notion API
+    return init_notion_token().databases.query(  # query to the notion API
         **{
             "database_id": cfg.MEDS["DB_ID"],  # select the database to query
             "filter": {  # get only the elements that need to be restocked
