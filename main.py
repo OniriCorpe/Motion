@@ -157,7 +157,11 @@ def meds_retrieve():
 
 def agenda_results():
     """
-    TODO
+    Processes the outpout data of agenda_retrieve().
+
+    Returns :
+    A list of all events to come in a number of rolling days configured in the config file.
+    Or a string that indicates to configure the token in the config file.
     """
 
     # check that the database ID is filled
@@ -225,6 +229,7 @@ def meds_results():
     Returns :
     A list of all items to be restocked properly formatted.
     Or a string that indicates that nothing is to be restocked.
+    Or a string that indicates to configure the token in the config file.
     """
 
     # check that the database ID is filled
