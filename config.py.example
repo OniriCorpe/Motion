@@ -11,10 +11,10 @@ NOTION_TOKEN = ""
 
 
 AGENDA = {
-    # get the database ID:
-    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
     # get the database template:
     # https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
+    # get the database ID:
+    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
     "DB_ID": "",
     # AGENDA_DB_ID: "",
     # Number of rolling days from today to retrieve future events. Default: 7 (one week)
@@ -49,10 +49,10 @@ SHOW_DATE = False
 
 
 MEDS = {
-    # get the database ID:
-    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
     # get the database template:
     # https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
+    # get the database ID:
+    # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
     "DB_ID": "",
     # MEDS_DB_ID: "",
     # Name of the database's column wich show the checkboxes indicates a refill is needed
