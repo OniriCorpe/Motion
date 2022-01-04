@@ -70,7 +70,7 @@ def init_notion():
     """
 
     # check that the Notion token is filled
-    if "secret_" in cfg.NOTION_TOKEN:
+    if "secret_" in cfg.NOTION_TOKEN and len(cfg.NOTION_TOKEN) == 50:
         # if there is string, trying to init the Notion token with it
         return Client(auth=cfg.NOTION_TOKEN)
     # if the Notion token isn't filled, print error and stop the program
