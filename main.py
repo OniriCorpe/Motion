@@ -96,7 +96,7 @@ show_current_date()
 
 # check that the database ID is filled
 # if config_has_setting(cfg, AGENDA["DB_ID"]):
-if cfg.AGENDA["DB_ID"] != "":
+if len(cfg.AGENDA["DB_ID"]) == 32:
     next_events = init_notion().databases.query(  # query to the notion API
         **{
             "database_id": cfg.AGENDA["DB_ID"],  # select the database to query
@@ -182,7 +182,7 @@ else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
 # check that the database ID is filled
-if cfg.MEDS["DB_ID"] != "":
+if len(cfg.MEDS["DB_ID"]) == 32:
     meds = init_notion().databases.query(  # query to the notion API
         **{
             "database_id": cfg.MEDS["DB_ID"],  # select the database to query
