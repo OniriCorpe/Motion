@@ -179,8 +179,6 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                 date_day = date_end[8:]  # get day
                 date_month = date_end[5:7]  # get month
                 date_end = f"{date_day}/{date_month}"  # combine day and month
-        else:  # if there is not an end date
-            date_end = False
         number_of_days_before = item["properties"][config.AGENDA_REMAINING_DAYS][
             "formula"
         ]["string"]
@@ -195,7 +193,7 @@ if config_has_setting(config, "AGENDA_DB_ID"):
         elif config.AGENDA_FILTER_TOMORROW in number_of_days_before:
             number_of_days_before = config.AGENDA_TOMORROW
         name = item["properties"][config.AGENDA_NAME]["title"][0]["plain_text"]
-        if date_end is False:  # if there is not an end date
+        if date_end is None:  # if there is not an end date
             print(f"{date_start} {number_of_days_before} {name}")
         else:  # if there is an end date
             print(f"{date_start}-{date_end} {number_of_days_before} {name}")
