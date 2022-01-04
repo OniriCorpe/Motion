@@ -59,6 +59,15 @@ def get_current_date():
     return date.today()
 
 
+def current_date_timedelta(number_of_days):
+    """
+    TODO
+    """
+
+    # edit the number of days if you want
+    return get_current_date() + timedelta(days=number_of_days)
+
+
 def config_has_setting(config_file, config_item):
     """
     Arguments:
@@ -106,8 +115,6 @@ show_current_date()
 
 # check that the database ID is filled
 if config_has_setting(config, "AGENDA_DB_ID"):
-    # edit the number of days if you want
-    inaweek = get_current_date() + timedelta(days=7)
     next_events = init_notion().databases.query(  # query to the notion API
         **{
             "database_id": config.AGENDA_DB_ID,  # select the database to query
@@ -126,7 +133,8 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                         "date": {  # we want the items in a week and before
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
-                            "on_or_before": inaweek.strftime("%Y-%m-%d"),
+                            "on_or_before": current_date_timedelta(
+                                config.NUMBER_OF_DAYS).strftime("%Y-%m-%d"),
                         },
                     },
                 ]

@@ -14,7 +14,8 @@ NOTION_TOKEN = ""
 # get the database template:
 # https://xaanaa.notion.site/Agenda-template-bc1b0b00787e44a18218cde30f71f524
 AGENDA_DB_ID = ""
-
+# Number of rolling days from today to retrieve future events. Default: 7 (one week)
+NUMBER_OF_DAYS = 7
 
 # optional stuff:
 
