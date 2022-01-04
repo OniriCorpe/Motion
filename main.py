@@ -94,10 +94,12 @@ def show_current_date():
 show_current_date()
 
 
-# check that the database ID is filled
-# if config_has_setting(cfg, AGENDA["DB_ID"]):
-if len(cfg.AGENDA["DB_ID"]) == 32:
-    next_events = init_notion().databases.query(  # query to the notion API
+def agenda_retrieve():
+    """
+    Retrieves data from the "AGENDA" database from the Notion API.
+    """
+
+    return init_notion().databases.query(  # query to the notion API
         **{
             "database_id": cfg.AGENDA["DB_ID"],  # select the database to query
             "filter": {  # get only the items that come in this rolling week
@@ -130,8 +132,20 @@ if len(cfg.AGENDA["DB_ID"]) == 32:
             ],
         }
     )
+
+
+def agenda_results():
+    """
+    TODO
+    """
+
+    # check that the database ID is filled
+    if len(cfg.AGENDA["DB_ID"]) != 32:  # if the database ID is not filled
+        return "Please configure your database ID 'AGENDA: DB_ID' in your config file"
+    data = agenda_retrieve()["results"]
+    data_processed = []
     # print all items that come in this rolling week
-    for item in next_events["results"]:
+    for item in data:
         # get item starting date
         date_start = item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
         if "T" in date_start:  # check if 'date' has hour data
@@ -166,8 +180,8 @@ if len(cfg.AGENDA["DB_ID"]) == 32:
         ]["string"]
         # if 'Dans' is found in the 'number_of_days_before' variable
         if cfg.AGENDA["FILTER_IN_DAYS"] in number_of_days_before:
-            IN_DAYS = cfg.AGENDA["IN_DAYS"]
-            number_of_days_before = f"{number_of_days_before[5:-6]}{IN_DAYS}"
+            in_days = cfg.AGENDA["IN_DAYS"]
+            number_of_days_before = f"{number_of_days_before[5:-6]}{in_days}"
         # if 'Aujourd’hui' is found in the 'number_of_days_before' variable
         elif cfg.AGENDA["FILTER_TODAY"] in number_of_days_before:
             number_of_days_before = cfg.AGENDA["TODAY"]
@@ -175,11 +189,12 @@ if len(cfg.AGENDA["DB_ID"]) == 32:
             number_of_days_before = cfg.AGENDA["TOMORROW"]
         name = item["properties"][cfg.AGENDA["NAME"]]["title"][0]["plain_text"]
         if date_end is None:  # if there is not an end date
-            print(f"{date_start} {number_of_days_before} {name}")
+            data_processed.append((date_start, number_of_days_before, name))
         else:  # if there is an end date
-            print(f"{date_start}-{date_end} {number_of_days_before} {name}")
-else:  # if the database ID is not filled
-    print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
+            data_processed.append(
+                (f"{date_start}-{date_end}", number_of_days_before, name)
+            )
+    return data_processed
 
 
 def meds_retrieve():
@@ -232,8 +247,10 @@ def meds_results():
             return data_processed
         # there is no item to restock
         return "rien à restock"
+    return "Please configure your database ID 'MEDS: DB_ID' in your config file"
 
 
+pprint(agenda_results())
 pprint(meds_results())
 
 # please note that i'm gay
