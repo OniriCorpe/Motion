@@ -48,7 +48,6 @@ AGENDA = {
 SHOW_DATE = False
 
 
-
 MEDS = {
     # get the database ID:
     # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
