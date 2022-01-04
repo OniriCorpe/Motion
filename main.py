@@ -59,13 +59,13 @@ def get_current_date():
     return date.today()
 
 
-def current_date_timedelta(number_of_days):
+def current_date_timedelta():
     """
-    TODO
+    Calculates the current date to which a certain number of days defined
+    in the configuration file (NUMBER_OF_DAYS) is added.
     """
 
-    # edit the number of days if you want
-    return get_current_date() + timedelta(days=number_of_days)
+    return get_current_date() + timedelta(days=config.NUMBER_OF_DAYS)
 
 
 def config_has_setting(config_file, config_item):
@@ -133,8 +133,9 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                         "date": {  # we want the items in a week and before
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
-                            "on_or_before": current_date_timedelta(
-                                config.NUMBER_OF_DAYS).strftime("%Y-%m-%d"),
+                            "on_or_before": current_date_timedelta().strftime(
+                                "%Y-%m-%d"
+                            ),
                         },
                     },
                 ]
