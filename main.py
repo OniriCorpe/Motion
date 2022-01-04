@@ -65,7 +65,7 @@ def current_date_timedelta():
     in the configuration file (NUMBER_OF_DAYS) is added.
     """
 
-    return get_current_date() + timedelta(days=config.NUMBER_OF_DAYS)
+    return get_current_date() + timedelta(days=config.AGENDA_NUMBER_OF_DAYS)
 
 
 def config_has_setting(config_file, config_item):
@@ -121,7 +121,7 @@ if config_has_setting(config, "AGENDA_DB_ID"):
             "filter": {  # get only the items that come in this rolling week
                 "and": [  # we want to satisfy the 2 conditions
                     {
-                        "property": "Date",  # edit with the name of the property to filter
+                        "property": config.AGENDA_DATE,
                         "date": {  # we want the current and future items
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
@@ -129,7 +129,7 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                         },
                     },
                     {
-                        "property": "Date",  # edit with the name of the property to filter
+                        "property": config.AGENDA_DATE,
                         "date": {  # we want the items in a week and before
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
@@ -142,7 +142,7 @@ if config_has_setting(config, "AGENDA_DB_ID"):
             },
             "sorts": [  # sort items from nearest to farthest
                 {
-                    "property": "Date",  # edit with the name of the property to sort against
+                    "property": config.AGENDA_DATE,
                     "direction": "ascending",
                 },
             ],
@@ -150,9 +150,8 @@ if config_has_setting(config, "AGENDA_DB_ID"):
     )
     # print all items that come in this rolling week
     for item in next_events["results"]:
-        # edit 'Date' with the name of the property of your database
         # get item starting date
-        date_start = item["properties"]["Date"]["date"]["start"]
+        date_start = item["properties"][config.AGENDA_DATE]["date"]["start"]
         if "T" in date_start:  # check if 'date' has hour data
             date_day = date_start[8:-19]  # get day
             date_month = date_start[5:-22]  # get month
@@ -165,9 +164,8 @@ if config_has_setting(config, "AGENDA_DB_ID"):
             date_day = date_start[8:]  # get day
             date_month = date_start[5:7]  # get month
             date_start = f"{date_day}/{date_month}"  # combine day and month
-        # edit 'Date' with the name of the property of your database
         # get item ending date
-        date_end = item["properties"]["Date"]["date"]["end"]
+        date_end = item["properties"][config.AGENDA_DATE]["date"]["end"]
         if date_end is not None:  # if there is an end date
             if "T" in date_end:  # check if 'date' has hour data
                 date_day = date_end[8:-19]  # get day
@@ -183,18 +181,20 @@ if config_has_setting(config, "AGENDA_DB_ID"):
                 date_end = f"{date_day}/{date_month}"  # combine day and month
         else:  # if there is not an end date
             date_end = False
-        # edit 'Nb Jours' with the name in your database
-        number_of_days_before = item["properties"]["Nb Jours"]["formula"]["string"]
+        number_of_days_before = item["properties"][config.AGENDA_REMAINING_DAYS][
+            "formula"
+        ]["string"]
         # if 'Dans' is found in the 'number_of_days_before' variable
-        if "Dans" in number_of_days_before:
-            number_of_days_before = number_of_days_before[5:-6] + " j"
+        if config.AGENDA_FILTER_IN_DAYS in number_of_days_before:
+            number_of_days_before = (
+                f"{number_of_days_before[5:-6]}{config.AGENDA_IN_DAYS}"
+            )
         # if 'Aujourd’hui' is found in the 'number_of_days_before' variable
-        elif "Aujourd’hui" in number_of_days_before:
-            number_of_days_before = "ajd"
-        elif "Demain" in number_of_days_before:
-            number_of_days_before = "dem"
-        # edit 'Nom' with the name of your database
-        name = item["properties"]["Nom"]["title"][0]["plain_text"]
+        elif config.AGENDA_FILTER_TODAY in number_of_days_before:
+            number_of_days_before = config.AGENDA_TODAY
+        elif config.AGENDA_FILTER_TOMORROW in number_of_days_before:
+            number_of_days_before = config.AGENDA_TOMORROW
+        name = item["properties"][config.AGENDA_NAME]["title"][0]["plain_text"]
         if date_end is False:  # if there is not an end date
             print(f"{date_start} {number_of_days_before} {name}")
         else:  # if there is an end date
