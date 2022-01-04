@@ -17,10 +17,16 @@ AGENDA_DB_ID = ""
 # Number of rolling days from today to retrieve future events. Default: 7 (one week)
 NUMBER_OF_DAYS = 7
 
+
 # optional stuff:
 
 SHOW_DATE = True
 
+
 # get the database template:
 # https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
 MEDS_DB_ID = ""
+# Name of the database's column wich show the name of your medicine stuff
+MEDS_NAME = "Nom"
+# Name of the database's column wich show the number of units to be restocked
+MEDS_NUMBER = "NbRefill"
