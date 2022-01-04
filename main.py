@@ -181,9 +181,13 @@ if len(cfg.AGENDA["DB_ID"]) == 32:
 else:  # if the database ID is not filled
     print("Please configure your database ID 'AGENDA_DB_ID' in your config file")
 
-# check that the database ID is filled
-if len(cfg.MEDS["DB_ID"]) == 32:
-    meds = init_notion().databases.query(  # query to the notion API
+
+def meds_retrieve():
+    """
+    Retrieves data from the "MEDS" database from the Notion API.
+    """
+
+    return init_notion().databases.query(  # query to the notion API
         **{
             "database_id": cfg.MEDS["DB_ID"],  # select the database to query
             "filter": {  # get only the elements that need to be restocked
@@ -192,17 +196,44 @@ if len(cfg.MEDS["DB_ID"]) == 32:
                     "equals": True,
                 },
             },
+            "sorts": [  # sort items in alphabetical order
+                {
+                    "property": cfg.MEDS["NAME"],
+                    "direction": "ascending",
+                },
+            ],
         }
     )
-    # print all the elements that need to be restocked
-    if meds["results"]:
-        for item in meds["results"]:
-            # get item name
-            name_meds = item["properties"][cfg.MEDS["NAME"]]["title"][0]["plain_text"]
-            # get the minimum number of units to be restocked
-            nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
-            pprint(f"{name_meds} : ≥{nb_refill}")
-    else:  # there is no item to restock
-        print("rien à restock")
+
+
+def meds_results():
+    """
+    Processes the outpout data of meds_retrieve().
+
+    Returns :
+    A list of all items to be restocked properly formatted.
+    Or a string that indicates that nothing is to be restocked.
+    """
+
+    # check that the database ID is filled
+    if len(cfg.MEDS["DB_ID"]) == 32:
+        # print all the elements that need to be restocked
+        data = meds_retrieve()["results"]
+        data_processed = []
+        if data:
+            for item in data:
+                # get item name
+                name_meds = item["properties"][cfg.MEDS["NAME"]]["title"][0][
+                    "plain_text"
+                ]
+                # get the minimum number of units to be restocked
+                nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
+                data_processed.append(f"{name_meds} : ≥{nb_refill}")
+            return data_processed
+        # there is no item to restock
+        return "rien à restock"
+
+
+pprint(meds_results())
 
 # please note that i'm gay
