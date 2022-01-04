@@ -91,9 +91,6 @@ def show_current_date():
         print(date.today().strftime("%d/%m"))
 
 
-show_current_date()
-
-
 def agenda_retrieve():
     """
     Retrieves data from the "AGENDA" database from the Notion API.
@@ -127,6 +124,30 @@ def agenda_retrieve():
             "sorts": [  # sort items from nearest to farthest
                 {
                     "property": cfg.AGENDA["DATE"],
+                    "direction": "ascending",
+                },
+            ],
+        }
+    )
+
+
+def meds_retrieve():
+    """
+    Retrieves data from the "MEDS" database from the Notion API.
+    """
+
+    return init_notion_token().databases.query(  # query to the notion API
+        **{
+            "database_id": cfg.MEDS["DB_ID"],  # select the database to query
+            "filter": {  # get only the elements that need to be restocked
+                "property": cfg.MEDS["REFILL"],
+                "checkbox": {
+                    "equals": True,
+                },
+            },
+            "sorts": [  # sort items in alphabetical order
+                {
+                    "property": cfg.MEDS["NAME"],
                     "direction": "ascending",
                 },
             ],
@@ -197,30 +218,6 @@ def agenda_results():
     return data_processed
 
 
-def meds_retrieve():
-    """
-    Retrieves data from the "MEDS" database from the Notion API.
-    """
-
-    return init_notion_token().databases.query(  # query to the notion API
-        **{
-            "database_id": cfg.MEDS["DB_ID"],  # select the database to query
-            "filter": {  # get only the elements that need to be restocked
-                "property": cfg.MEDS["REFILL"],
-                "checkbox": {
-                    "equals": True,
-                },
-            },
-            "sorts": [  # sort items in alphabetical order
-                {
-                    "property": cfg.MEDS["NAME"],
-                    "direction": "ascending",
-                },
-            ],
-        }
-    )
-
-
 def meds_results():
     """
     Processes the outpout data of meds_retrieve().
@@ -250,6 +247,7 @@ def meds_results():
     return "Please configure your database ID 'MEDS: DB_ID' in your config file"
 
 
+show_current_date()
 pprint(agenda_results())
 pprint(meds_results())
 
