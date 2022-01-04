@@ -208,7 +208,7 @@ if config_has_setting(config, "MEDS_DB_ID"):
         **{
             "database_id": config.MEDS_DB_ID,  # select the database to query
             "filter": {  # get only the elements that need to be restocked
-                "property": "Refill",
+                "property": config.MEDS_REFILL,
                 "checkbox": {
                     "equals": True,
                 },
