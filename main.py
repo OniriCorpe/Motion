@@ -10,48 +10,7 @@ import sys
 from datetime import date, timedelta
 from pprint import pprint  # debug
 from notion_client import Client
-import peewee
 import config as cfg
-
-
-#  about WAL: https://sqlite.org/pragma.html#pragma_journal_mode
-db = peewee.SqliteDatabase(
-    # name of the DB file
-    "data.db",
-    # 2MB page-cache & using WAL-mode
-    pragmas=(("cache_size", -1024 * 2), ("journal_mode", "wal")),
-)
-
-
-class BaseModel(peewee.Model):
-    """The base model for the other models, adds common parameters to them"""
-
-    class Meta:  # pylint: disable=[R0903]
-        """Declaration of which database is to be used"""
-
-        database = db
-
-
-class NextEvents(BaseModel):
-    """Declaration of what the database contains for NextEvents"""
-
-    name = peewee.CharField()
-    date_start = peewee.DateField()
-    date_end = peewee.DateField()
-    id = peewee.CharField(unique=True)
-
-
-class Meds(BaseModel):
-    """Declaration of what the database contains for Meds"""
-
-    name = peewee.CharField()
-    nb_refill = peewee.DecimalField()
-    refill = peewee.BooleanField()
-    id = peewee.CharField(unique=True)
-
-
-db.connect()
-db.create_tables([NextEvents, Meds])
 
 
 def current_date_timedelta():
