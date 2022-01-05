@@ -27,9 +27,6 @@ AGENDA = {
     # before of your events
     "REMAINING_DAYS": "Nb Jours",
     # A word that comes out of the formula in the "Nb Days" column for an event
-    # that will take place in several days
-    "FILTER_IN_DAYS": "Dans",
-    # A word that comes out of the formula in the "Nb Days" column for an event
     # that takes place today
     "FILTER_TODAY": "Aujourd’hui",
     # A word that comes out of the formula in the "Nb Days" column for an event

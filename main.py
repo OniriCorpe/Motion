@@ -155,6 +155,23 @@ def meds_retrieve():
     )
 
 
+def agenda_format_date(data):
+    """
+    Processes a date string to format it.
+
+    e.g. of input: "2021-05-10" or "2021-05-10T12:00:00" or "None"
+    e.g. of output: "10/05" or "10/05 12:00" or "None"
+    """
+    if data is None:
+        return None
+    # check if 'date' has hour data
+    if "T" in data:
+        # combine day, month and hour
+        return f"{data[8:-19]}/{data[5:-22]} {data[11:-13]}"
+    # combine day and month
+    return f"{data[8:]}/{data[5:7]}"
+
+
 def agenda_results():
     """
     Processes the outpout data of agenda_retrieve().
@@ -172,46 +189,24 @@ def agenda_results():
     # print all items that come in this rolling week
     for item in data:
         # get item starting date
-        date_start = item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
-        if "T" in date_start:  # check if 'date' has hour data
-            date_day = date_start[8:-19]  # get day
-            date_month = date_start[5:-22]  # get month
-            date_hour = date_start[11:-13]  # get hour
-            date_start = (
-                # combine day, month and hour
-                f"{date_day}/{date_month} {date_hour}"
-            )
-        elif "T" not in date_start:  # check if 'date' has no hour data
-            date_day = date_start[8:]  # get day
-            date_month = date_start[5:7]  # get month
-            date_start = f"{date_day}/{date_month}"  # combine day and month
+        date_start = agenda_format_date(
+            item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
+        )
         # get item ending date
-        date_end = item["properties"][cfg.AGENDA["DATE"]]["date"]["end"]
-        if date_end is not None:  # if there is an end date
-            if "T" in date_end:  # check if 'date' has hour data
-                date_day = date_end[8:-19]  # get day
-                date_month = date_end[5:-22]  # get month
-                date_hour = date_end[11:-13]  # get hour
-                date_end = (
-                    # combine day, month and hour
-                    f"{date_day}/{date_month} {date_hour}"
-                )
-            elif "T" not in date_end:  # check if 'date' has no hour data
-                date_day = date_end[8:]  # get day
-                date_month = date_end[5:7]  # get month
-                date_end = f"{date_day}/{date_month}"  # combine day and month
+        date_end = agenda_format_date(
+            item["properties"][cfg.AGENDA["DATE"]]["date"]["end"]
+        )
         number_of_days_before = item["properties"][cfg.AGENDA["REMAINING_DAYS"]][
             "formula"
         ]["string"]
-        # if 'Dans' is found in the 'number_of_days_before' variable
-        if cfg.AGENDA["FILTER_IN_DAYS"] in number_of_days_before:
-            in_days = cfg.AGENDA["IN_DAYS"]
-            number_of_days_before = f"{number_of_days_before[5:-6]}{in_days}"
         # if 'Aujourd’hui' is found in the 'number_of_days_before' variable
-        elif cfg.AGENDA["FILTER_TODAY"] in number_of_days_before:
+        if cfg.AGENDA["FILTER_TODAY"] in number_of_days_before:
             number_of_days_before = cfg.AGENDA["TODAY"]
         elif cfg.AGENDA["FILTER_TOMORROW"] in number_of_days_before:
             number_of_days_before = cfg.AGENDA["TOMORROW"]
+        else:
+            in_days = cfg.AGENDA["IN_DAYS"]
+            number_of_days_before = f"{number_of_days_before[5:-6]}{in_days}"
         name = item["properties"][cfg.AGENDA["NAME"]]["title"][0]["plain_text"]
         if date_end is None:  # if there is not an end date
             data_processed.append((date_start, number_of_days_before, name))
