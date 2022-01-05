@@ -88,7 +88,7 @@ def show_current_date():
     # get and print today's date (without year)
     # if 'show_date' is true in the configuration file, display the current date
     if cfg.SHOW_DATE:
-        print(date.today().strftime("%d/%m"))
+        return date.today().strftime("%d/%m")
 
 
 def agenda_retrieve():
@@ -247,7 +247,7 @@ def meds_results():
     return "Please configure your database ID 'MEDS: DB_ID' in your config file"
 
 
-show_current_date()
+pprint(show_current_date())
 pprint(agenda_results())
 pprint(meds_results())
 
