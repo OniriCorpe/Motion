@@ -22,21 +22,18 @@ def current_date_timedelta():
     return date.today() + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
 
 
-def init_notion_token():
+def check_notion_token(token):
     """
-    Return the Notion client initialized with the token
-    or exit the program if there is no token.
+    Checks that the Notion token in arg is correctly filled.
+
+    Returns:
+        True: The token contains "secret_" and is 50 characters long.
+        False: The token is incorrect.
     """
 
-    # check that the Notion token is filled
-    if "secret_" in cfg.NOTION_TOKEN and len(cfg.NOTION_TOKEN) == 50:
-        # if there is string, trying to init the Notion token with it
-        return Client(auth=cfg.NOTION_TOKEN)
-    # if the Notion token isn't filled, print error and stop the program
-    sys.exit(
-        "Please configure your Notion token in your configuration file.\n"
-        "Get your token here: https://developers.notion.com/docs/getting-started"
-    )
+    if "secret_" in token and len(token) == 50:
+        return True
+    return False
 
 
 def show_current_date():
@@ -55,7 +52,13 @@ def agenda_retrieve():
     Retrieves data from the "AGENDA" database from the Notion API.
     """
 
-    return init_notion_token().databases.query(  # query to the notion API
+    if not check_notion_token(cfg.NOTION_TOKEN):
+        sys.exit(
+            "Please configure your Notion token in your configuration file.\n"
+            "Get your token here: https://developers.notion.com/docs/getting-started"
+        )
+    # query to the notion API
+    return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
             "database_id": cfg.AGENDA["DB_ID"],  # select the database to query
             "filter": {  # get only the items that come in this rolling week
@@ -95,7 +98,13 @@ def meds_retrieve():
     Retrieves data from the "MEDS" database from the Notion API.
     """
 
-    return init_notion_token().databases.query(  # query to the notion API
+    if not check_notion_token(cfg.NOTION_TOKEN):
+        sys.exit(
+            "Please configure your Notion token in your configuration file.\n"
+            "Get your token here: https://developers.notion.com/docs/getting-started"
+        )
+    # query to the notion API
+    return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
             "database_id": cfg.MEDS["DB_ID"],  # select the database to query
             "filter": {  # get only the elements that need to be restocked
