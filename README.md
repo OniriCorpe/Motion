@@ -2,7 +2,6 @@
 
 A shitty 🦝 project to display the next events of my [Notion](https://www.notion.so/) calendar on a small e-ink screen ([Pimoroni's Inky Phat](https://shop.pimoroni.com/products/inky-phat)) connected to a [Raspberry Pi Zero W](https://www.raspberrypi.com/products/raspberry-pi-zero-w/).
 
-
 ## Usage
 
 Copy the configuration example file and rename it to 'config.py'.  
