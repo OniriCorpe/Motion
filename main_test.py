@@ -10,7 +10,7 @@ import main
 
 def test_check_notion_token():
     """
-    [summary]
+    Tests the check_notion_token(token) function with valid and invalids tokens.
     """
 
     assert (
@@ -23,3 +23,12 @@ def test_check_notion_token():
     )
     assert main.check_notion_token("secret_test") is False
     assert main.check_notion_token("") is False
+
+
+def check_agenda_format_date():
+    """
+    Tests the date formatting in all conditions.
+    """
+    assert main.agenda_format_date("2022-12-13") is "13/12"
+    assert main.agenda_format_date("2024-01-27T14:30:00") is "27/01 14:30"
+    assert main.agenda_format_date(None) is None
