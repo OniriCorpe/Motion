@@ -126,7 +126,6 @@ def meds_retrieve():
         )
     if not check_db_id(cfg.MEDS["DB_ID"]):
         sys.exit("Please configure your database ID (MEDS: DB_ID) in your config file.")
-    check_db_id(cfg.MEDS["DB_ID"])
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
