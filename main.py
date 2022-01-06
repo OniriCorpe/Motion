@@ -36,6 +36,24 @@ def check_notion_token(token):
     return False
 
 
+def check_db_id(db_id):
+    """
+    Checks if the DB ID in argument is 32 characters long.
+
+    Args:
+        db_id (string): The Notion's database ID you want to access to.
+
+    Returns:
+        True: The DB ID seems valid.
+        False: The DB ID seems incorrect.
+    """
+
+    # check that the database ID is filled
+    if len(db_id) == 32:  # if the database ID is not filled
+        return True
+    return False
+
+
 def show_current_date():
     """
     If 'SHOW_DATE' is True in the configuration file, print the current date formated.
@@ -55,6 +73,10 @@ def agenda_retrieve():
         sys.exit(
             "Please configure your Notion token in your configuration file.\n"
             "Get your token here: https://developers.notion.com/docs/getting-started"
+        )
+    if not check_db_id(cfg.AGENDA["DB_ID"]):
+        sys.exit(
+            "Please configure your database ID (AGENDA: DB_ID) in your config file."
         )
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
@@ -102,6 +124,9 @@ def meds_retrieve():
             "Please configure your Notion token in your configuration file.\n"
             "Get your token here: https://developers.notion.com/docs/getting-started"
         )
+    if not check_db_id(cfg.MEDS["DB_ID"]):
+        sys.exit("Please configure your database ID (MEDS: DB_ID) in your config file.")
+    check_db_id(cfg.MEDS["DB_ID"])
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
@@ -148,9 +173,6 @@ def agenda_results():
     Or a string that indicates to configure the token in the config file.
     """
 
-    # check that the database ID is filled
-    if len(cfg.AGENDA["DB_ID"]) != 32:  # if the database ID is not filled
-        return "Please configure your database ID 'AGENDA: DB_ID' in your config file"
     data = agenda_retrieve()["results"]
     data_processed = []
     # print all items that come in this rolling week
@@ -194,24 +216,19 @@ def meds_results():
     Or a string that indicates to configure the token in the config file.
     """
 
-    # check that the database ID is filled
-    if len(cfg.MEDS["DB_ID"]) == 32:
-        # print all the elements that need to be restocked
-        data = meds_retrieve()["results"]
-        data_processed = []
-        if data:
-            for item in data:
-                # get item name
-                name_item = item["properties"][cfg.MEDS["NAME"]]["title"][0][
-                    "plain_text"
-                ]
-                # get the minimum number of units to be restocked
-                nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
-                data_processed.append(f"{name_item} : ≥{nb_refill}")
-            return data_processed
-        # there is no item to restock
-        return "rien à restock"
-    return "Please configure your database ID 'MEDS: DB_ID' in your config file"
+    # print all the elements that need to be restocked
+    data = meds_retrieve()["results"]
+    data_processed = []
+    if data:
+        for item in data:
+            # get item name
+            name_item = item["properties"][cfg.MEDS["NAME"]]["title"][0]["plain_text"]
+            # get the minimum number of units to be restocked
+            nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
+            data_processed.append(f"{name_item} : ≥{nb_refill}")
+        return data_processed
+    # there is no item to restock
+    return "rien à restock"
 
 
 if cfg.SHOW_DATE:

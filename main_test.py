@@ -25,6 +25,19 @@ def test_check_notion_token():
     assert main.check_notion_token("") is False
 
 
+def test_db_id():
+    """
+    Tests the check_db_id(db_id) function with valid and invalids IDs.
+
+    A valid ID is 32 characters long.
+    """
+
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kx") is True
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kxxxx") is False
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6") is False
+    assert main.check_db_id("") is False
+
+
 def check_agenda_format_date():
     """
     Tests the date formatting in all conditions.
