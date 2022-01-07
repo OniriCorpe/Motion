@@ -156,10 +156,10 @@ def agenda_format_date(data):
 
     if data is None:
         return None
-    # check if 'date' has hour data
-    if "T" in data:  # e.g.: "2021-05-10T12:00:00" or "2022-01-09T15:00:00.000+01:00"
+    # e.g.: "2021-05-10T12:00:00" or "2021-05-10T12:00:00.000+01:00" returns "10/05 12:00"
+    if "T" in data:
         return f"{data[8:10]}/{data[5:7]} {data[11:16]}"
-    # e.g.: "2021-05-10"
+    # e.g.: "2021-05-10" returns "10/05"
     return f"{data[8:]}/{data[5:7]}"
 
 
