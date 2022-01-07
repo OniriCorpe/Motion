@@ -12,7 +12,7 @@ def test_check_notion_token():
     """
     Tests the check_notion_token(token) function with valid and invalids tokens.
 
-    A valid Notion token contains "secret_" and is 50 characters long.
+    A valid Notion token contains "secret_" at the beginning and is 50 characters long.
     """
 
     assert (  # 50 chars with "secret_" at the beginning
@@ -31,7 +31,7 @@ def test_check_notion_token():
     assert main.check_notion_token("") is False  # nothing
 
 
-def test_db_id():
+def test_check_db_id():
     """
     Tests the check_db_id(db_id) function with valid and invalids IDs.
 
@@ -46,7 +46,7 @@ def test_db_id():
 
 def test_agenda_format_date():
     """
-    Tests the date formatting in all conditions.
+    Tests that the function agenda_format_date(data) formats correctly under all conditions.
     """
 
     assert main.agenda_format_date("2022-12-13") == "13/12"
