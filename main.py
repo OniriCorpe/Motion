@@ -31,7 +31,7 @@ def check_notion_token(token):
         False: The token is incorrect.
     """
 
-    if "secret_" in token and len(token) == 50:
+    if token.startswith("secret_") and len(token) == 50:
         return True
     return False
 

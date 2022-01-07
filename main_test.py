@@ -15,9 +15,13 @@ def test_check_notion_token():
     A valid Notion token contains "secret_" and is 50 characters long.
     """
 
-    assert (  # 50 chars with "secret_"
+    assert (  # 50 chars with "secret_" at the beginning
         main.check_notion_token("secret_xxpZwWkuRip7eXipUC7D2fS2sCMBi3v9KFq7aT46HFQ")
         is True
+    )
+    assert (  # 50 chars with "secret_" in the middle
+        main.check_notion_token("xxpZwWkuRip7eXipUsecret_C7D2fS2sCMBi3v9KFq7aT46HFQ")
+        is False
     )
     assert (  # 50 chars without "secret_"
         main.check_notion_token("ojmvCx5XjJUfZziJ9a3AHQKGHcLdy2zKNVfNQa5YtFZaAQSbPZ")
