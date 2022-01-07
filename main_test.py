@@ -38,10 +38,14 @@ def test_db_id():
     assert main.check_db_id("") is False
 
 
-def check_agenda_format_date():
+def test_agenda_format_date():
     """
     Tests the date formatting in all conditions.
     """
-    assert main.agenda_format_date("2022-12-13") is "13/12"
-    assert main.agenda_format_date("2024-01-27T14:30:00") is "27/01 14:30"
+
+    assert main.agenda_format_date("2022-12-13") == "13/12"
+    assert main.agenda_format_date("2024-01-27T14:30:00") == "27/01 14:30"
+    assert main.agenda_format_date("2022-01-09T15:00:00.000") == "09/01 15:00"
+    assert main.agenda_format_date("2021-10-15T12:00:00-07:00") == "15/10 12:00"
+    assert main.agenda_format_date("2022-01-09T15:00:00.000+01:00") == "09/01 15:00"
     assert main.agenda_format_date(None) is None
