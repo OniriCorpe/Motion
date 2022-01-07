@@ -11,18 +11,20 @@ import main
 def test_check_notion_token():
     """
     Tests the check_notion_token(token) function with valid and invalids tokens.
+
+    A valid Notion token contains "secret_" and is 50 characters long.
     """
 
-    assert (
+    assert (  # 50 chars with "secret_"
         main.check_notion_token("secret_xxpZwWkuRip7eXipUC7D2fS2sCMBi3v9KFq7aT46HFQ")
         is True
     )
-    assert (
+    assert (  # 50 chars without "secret_"
         main.check_notion_token("ojmvCx5XjJUfZziJ9a3AHQKGHcLdy2zKNVfNQa5YtFZaAQSbPZ")
         is False
     )
-    assert main.check_notion_token("secret_test") is False
-    assert main.check_notion_token("") is False
+    assert main.check_notion_token("secret_test") is False  # 11 chars with secret
+    assert main.check_notion_token("") is False  # nothing
 
 
 def test_db_id():
@@ -32,10 +34,10 @@ def test_db_id():
     A valid ID is 32 characters long.
     """
 
-    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kx") is True
-    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kxxxx") is False
-    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6") is False
-    assert main.check_db_id("") is False
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kx") is True  # 32
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6kxx") is False  # 34
+    assert main.check_db_id("Uz79xghKTpgsnHNXdLJpbh98ey6rL6") is False  # 30
+    assert main.check_db_id("") is False  # 0
 
 
 def test_agenda_format_date():
