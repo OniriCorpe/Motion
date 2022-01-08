@@ -151,21 +151,20 @@ def agenda_results(data):
     Or a string that indicates to configure the token in the config file.
     """
 
-    data = data["results"]
     data_processed = []
-    for item in data:
-        # get item starting date
+    for item in data["results"]:
+        # get the event starting date
         date_start = agenda_format_date(
             item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
         )
-        # get item ending date
+        # get the event ending date
         date_end = agenda_format_date(
             item["properties"][cfg.AGENDA["DATE"]]["date"]["end"]
         )
+        # get the remaining time before the event
         number_of_days_before = item["properties"][cfg.AGENDA["REMAINING_DAYS"]][
             "formula"
         ]["string"]
-        # if 'Aujourd’hui' is found in the 'number_of_days_before' variable
         if cfg.AGENDA["FILTER_TODAY"] in number_of_days_before:
             number_of_days_before = cfg.AGENDA["TODAY"]
         elif cfg.AGENDA["FILTER_TOMORROW"] in number_of_days_before:
@@ -173,6 +172,7 @@ def agenda_results(data):
         else:
             in_days = cfg.AGENDA["IN_DAYS"]
             number_of_days_before = f"{number_of_days_before[5:-6]}{in_days}"
+        # get the event name
         name = item["properties"][cfg.AGENDA["NAME"]]["title"][0]["plain_text"]
         # if there is no end date
         if date_end is None:
@@ -195,10 +195,9 @@ def meds_results(data):
     Or a string that indicates to configure the token in the config file.
     """
 
-    data = data["results"]
     data_processed = []
-    for item in data:
-        # get item name
+    for item in data["results"]:
+        # get the item name
         name_item = item["properties"][cfg.MEDS["NAME"]]["title"][0]["plain_text"]
         # get the minimum number of units to be restocked
         nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
