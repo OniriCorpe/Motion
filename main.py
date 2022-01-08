@@ -44,8 +44,6 @@ def check_db_id(db_id):
 def agenda_retrieve():
     """
     Retrieves data from the "AGENDA" database from the Notion API.
-
-    Exits the programm with an appropriate error if the Notion token or the database ID isn't good.
     """
 
     # query to the notion API
@@ -98,8 +96,6 @@ def agenda_retrieve():
 def meds_retrieve():
     """
     Retrieves data from the "MEDS" database from the Notion API.
-
-    Exits the programm with an appropriate error if the Notion token or the database ID isn't good.
     """
 
     # query to the notion API
@@ -148,7 +144,6 @@ def agenda_results(data):
 
     Returns :
     A list of all events to come in a number of rolling days configured in the config file.
-    Or a string that indicates to configure the token in the config file.
     """
 
     data_processed = []
@@ -191,8 +186,6 @@ def meds_results(data):
 
     Returns :
     A list of all items to be restocked properly formatted.
-    Or a string that indicates that nothing is to be restocked.
-    Or a string that indicates to configure the token in the config file.
     """
 
     data_processed = []
