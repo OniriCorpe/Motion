@@ -41,14 +41,6 @@ def check_db_id(db_id):
     return False
 
 
-def show_current_date():
-    """
-    Returns the current date formatted without year.
-    """
-
-    return date.today().strftime("%d/%m")
-
-
 def agenda_retrieve():
     """
     Retrieves data from the "AGENDA" database from the Notion API.
@@ -235,7 +227,7 @@ def meds_results():
 
 
 if cfg.SHOW_DATE:
-    pprint(show_current_date())
+    pprint(date.today().strftime("%d/%m"))
 pprint(agenda_results())
 pprint(meds_results())
 
