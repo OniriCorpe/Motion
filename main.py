@@ -13,15 +13,6 @@ from notion_client import Client
 import config as cfg
 
 
-def current_date_timedelta():
-    """
-    Calculates the current date to which a certain number of days defined
-    in the configuration file (NUMBER_OF_DAYS) is added.
-    """
-
-    return date.today() + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
-
-
 def check_notion_token(token):
     """
     Checks that the Notion token in argument is valid.
@@ -89,6 +80,7 @@ def agenda_retrieve():
                         "date": {
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
+                            # get today's date then format it correctly
                             "on_or_after": date.today().strftime("%Y-%m-%d"),
                         },
                     },
@@ -98,9 +90,13 @@ def agenda_retrieve():
                         "date": {
                             # Date filter condition:
                             # https://developers.notion.com/reference/post-database-query#date-filter-condition
-                            "on_or_before": current_date_timedelta().strftime(
-                                "%Y-%m-%d"
-                            ),
+                            "on_or_before": (
+                                # add the number of days defined in the
+                                # configuration file to the today's date
+                                date.today()
+                                + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
+                                # then format it correctly
+                            ).strftime("%Y-%m-%d"),
                         },
                     },
                 ]
