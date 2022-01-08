@@ -194,7 +194,7 @@ def test_meds_results():
     Tests that the function meds_results(data) formats correctly under all conditions.
     """
 
-    assert main.meds_results({"results": []}) == "rien à restock"
+    assert not main.meds_results({"results": []})
     assert (
         main.meds_results(
             {

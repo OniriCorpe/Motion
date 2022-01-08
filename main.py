@@ -197,17 +197,14 @@ def meds_results(data):
 
     data = data["results"]
     data_processed = []
-    if data:
-        for item in data:
-            # get item name
-            name_item = item["properties"][cfg.MEDS["NAME"]]["title"][0]["plain_text"]
-            # get the minimum number of units to be restocked
-            nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
-            # format a string and add it to the list
-            data_processed.append(f"{name_item} : ≥{nb_refill}")
-        return data_processed
-    # there is no item to restock
-    return "rien à restock"
+    for item in data:
+        # get item name
+        name_item = item["properties"][cfg.MEDS["NAME"]]["title"][0]["plain_text"]
+        # get the minimum number of units to be restocked
+        nb_refill = item["properties"][cfg.MEDS["NUMBER"]]["formula"]["number"]
+        # format a string and add it to the list
+        data_processed.append(f"{name_item} : ≥{nb_refill}")
+    return data_processed
 
 
 if cfg.SHOW_DATE:
