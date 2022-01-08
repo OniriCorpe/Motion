@@ -48,15 +48,6 @@ def agenda_retrieve():
     Exits the programm with an appropriate error if the Notion token or the database ID isn't good.
     """
 
-    if not check_notion_token(cfg.NOTION_TOKEN):
-        sys.exit(
-            "Please configure your Notion token in your configuration file.\n"
-            "Get your token here: https://developers.notion.com/docs/getting-started"
-        )
-    if not check_db_id(cfg.AGENDA["DB_ID"]):
-        sys.exit(
-            "Please configure your database ID (AGENDA: DB_ID) in your config file."
-        )
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
@@ -227,9 +218,21 @@ def meds_results(data):
 if cfg.SHOW_DATE:
     pprint(date.today().strftime("%d/%m"))
 
-pprint(agenda_results(agenda_retrieve()))
 
-if check_db_id(cfg.MEDS["DB_ID"]):
-    pprint(meds_results(meds_retrieve()))
+if check_notion_token(cfg.NOTION_TOKEN):
+    if check_db_id(cfg.AGENDA["DB_ID"]):
+        pprint(agenda_results(agenda_retrieve()))
+    else:
+        sys.exit(
+            "Please configure your database ID (AGENDA: DB_ID) in your config file."
+        )
+    if check_db_id(cfg.MEDS["DB_ID"]):
+        pprint(meds_results(meds_retrieve()))
+else:
+    sys.exit(
+        "Please configure your Notion token in your configuration file.\n"
+        "Get your token here: https://developers.notion.com/docs/getting-started"
+    )
+
 
 # please note that i'm gay
