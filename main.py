@@ -102,11 +102,6 @@ def meds_retrieve():
     Exits the programm with an appropriate error if the Notion token or the database ID isn't good.
     """
 
-    if not check_notion_token(cfg.NOTION_TOKEN):
-        sys.exit(
-            "Please configure your Notion token in your configuration file.\n"
-            "Get your token here: https://developers.notion.com/docs/getting-started"
-        )
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
