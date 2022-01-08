@@ -55,3 +55,202 @@ def test_agenda_format_date():
     assert main.agenda_format_date("2021-10-15T12:00:00-07:00") == "15/10 12:00"
     assert main.agenda_format_date("2022-01-09T15:00:00.000+01:00") == "09/01 15:00"
     assert main.agenda_format_date(None) is None
+
+
+def test_agenda_results():
+    """
+    [summary]
+    """
+
+    assert (
+        main.agenda_results(
+            {
+                "results": [
+                    {
+                        "properties": {
+                            "Date": {
+                                "date": {
+                                    "start": "2022-12-13",
+                                    "end": None,
+                                },
+                            },
+                            "Nb Jours": {
+                                "formula": {
+                                    "string": "🚨 Aujourd’hui",
+                                },
+                            },
+                            "Nom": {
+                                "title": [
+                                    {
+                                        "plain_text": "test 1",
+                                    }
+                                ],
+                            },
+                        },
+                    }
+                ],
+            }
+        )
+        == [("13/12", "ajd", "test 1")]
+    )
+    assert main.agenda_results(
+        {
+            "results": [
+                {
+                    "properties": {
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-08",
+                                "end": None,
+                            },
+                        },
+                        "Nb Jours": {
+                            "formula": {
+                                "string": "🚨 Aujourd’hui",
+                            },
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 1",
+                                }
+                            ],
+                        },
+                    },
+                },
+                {
+                    "properties": {
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-09T13:12:00.000+01:00",
+                                "end": None,
+                            },
+                        },
+                        "Nb Jours": {
+                            "formula": {"string": "Dans 2 jours"},
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 2",
+                                }
+                            ],
+                        },
+                    },
+                },
+                {
+                    "properties": {
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-11",
+                                "end": "2022-12-12",
+                            },
+                        },
+                        "Nb Jours": {
+                            "formula": {"string": "Dans 3 jours"},
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 3",
+                                }
+                            ],
+                        },
+                    },
+                },
+                {
+                    "properties": {
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-12T13:00:00.000+01:00",
+                                "end": "2022-12-14T12:00:00.000+01:00",
+                            },
+                        },
+                        "Nb Jours": {
+                            "formula": {"string": "Dans 5 jours"},
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 4",
+                                }
+                            ],
+                        },
+                    },
+                },
+            ],
+        }
+    ) == [
+        ("08/12", "ajd", "test 1"),
+        ("09/12 13:12", "2j", "test 2"),
+        ("11/12-12/12", "3j", "test 3"),
+        ("12/12 13:00-14/12 12:00", "5j", "test 4"),
+    ]
+
+
+def test_meds_results():
+    """
+    [summary]
+    """
+
+    assert main.meds_results({"results": []}) == "rien à restock"
+    assert (
+        main.meds_results(
+            {
+                "results": [
+                    {
+                        "properties": {
+                            "NbRefill": {
+                                "formula": {"number": 1},
+                            },
+                            "Nom": {
+                                "title": [
+                                    {
+                                        "plain_text": "test 1",
+                                    }
+                                ],
+                            },
+                        },
+                    }
+                ],
+            }
+        )
+        == ["test 1 : ≥1"]
+    )
+    assert (
+        main.meds_results(
+            {
+                "results": [
+                    {
+                        "properties": {
+                            "NbRefill": {
+                                "formula": {"number": 1},
+                            },
+                            "Nom": {
+                                "title": [
+                                    {
+                                        "plain_text": "test 1",
+                                    }
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        "properties": {
+                            "NbRefill": {
+                                "formula": {"number": 2},
+                            },
+                            "Nom": {
+                                "title": [
+                                    {
+                                        "plain_text": "test 2",
+                                    }
+                                ],
+                            },
+                        },
+                    },
+                ]
+            }
+        )
+        == ["test 1 : ≥1", "test 2 : ≥2"]
+    )
