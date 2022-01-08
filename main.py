@@ -116,8 +116,6 @@ def meds_retrieve():
             "Please configure your Notion token in your configuration file.\n"
             "Get your token here: https://developers.notion.com/docs/getting-started"
         )
-    if not check_db_id(cfg.MEDS["DB_ID"]):
-        sys.exit("Please configure your database ID (MEDS: DB_ID) in your config file.")
     # query to the notion API
     return Client(auth=cfg.NOTION_TOKEN).databases.query(
         **{
@@ -158,7 +156,7 @@ def agenda_format_date(data):
     return f"{data[8:]}/{data[5:7]}"
 
 
-def agenda_results():
+def agenda_results(data):
     """
     Processes the outpout data of agenda_retrieve().
 
@@ -167,7 +165,7 @@ def agenda_results():
     Or a string that indicates to configure the token in the config file.
     """
 
-    data = agenda_retrieve()["results"]
+    data = data["results"]
     data_processed = []
     for item in data:
         # get item starting date
@@ -201,7 +199,7 @@ def agenda_results():
     return data_processed
 
 
-def meds_results():
+def meds_results(data):
     """
     Processes the outpout data of meds_retrieve().
 
@@ -211,7 +209,7 @@ def meds_results():
     Or a string that indicates to configure the token in the config file.
     """
 
-    data = meds_retrieve()["results"]
+    data = data["results"]
     data_processed = []
     if data:
         for item in data:
@@ -228,7 +226,10 @@ def meds_results():
 
 if cfg.SHOW_DATE:
     pprint(date.today().strftime("%d/%m"))
-pprint(agenda_results())
-pprint(meds_results())
+
+pprint(agenda_results(agenda_retrieve()))
+
+if check_db_id(cfg.MEDS["DB_ID"]):
+    pprint(meds_results(meds_retrieve()))
 
 # please note that i'm gay

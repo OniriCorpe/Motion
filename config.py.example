@@ -50,6 +50,7 @@ MEDS = {
     # https://xaanaa.notion.site/Inventaire-m-dical-template-4b72c6408bbd41878661705e2d9d5b37
     # get the database ID:
     # https://developers.notion.com/docs/getting-started#step-2-share-a-database-with-your-integration
+    # fill "DB_ID" to activate the function
     "DB_ID": "",
     # MEDS_DB_ID: "",
     # Name of the database's column wich show the checkboxes indicates a refill is needed
