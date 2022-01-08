@@ -59,9 +59,10 @@ def test_agenda_format_date():
 
 def test_agenda_results():
     """
-    [summary]
+    Tests that the function agenda_results(data) formats correctly under all conditions.
     """
 
+    assert not main.agenda_results({"results": []})
     assert (
         main.agenda_results(
             {
@@ -190,7 +191,7 @@ def test_agenda_results():
 
 def test_meds_results():
     """
-    [summary]
+    Tests that the function meds_results(data) formats correctly under all conditions.
     """
 
     assert main.meds_results({"results": []}) == "rien à restock"
