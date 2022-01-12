@@ -44,7 +44,7 @@ AGENDA = {
 # optional stuff
 OPTIONAL = {
     # name of your custom font (to put in the root of the folder)
-    # e.g.: "B612-Regulat.ttf"
+    # e.g.: "B612-Bold.ttf"
     "FONT": "",
     # Showing the current date on the screen
     "SHOW_DATE": True,

@@ -1,3 +1,5 @@
 notion-client
-inky[rpi,fonts]
-Pillow
+RPi.GPIO>=0.7.1a4
+numpy==1.21.4
+Pillow==8.4.0
+inky[rpi]

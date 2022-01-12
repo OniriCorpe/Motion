@@ -216,7 +216,7 @@ def generate_image():
     else:
         fnt = ImageFont.load_default()
     # initiate a B&W image
-    image = Image.new("L", (250, 122), "white")
+    image = Image.new("P", (250, 122), "white")
     generate = ImageDraw.Draw(image)
     for iteration, item in enumerate(agenda_results(agenda_retrieve())):
         if iteration < 6:
@@ -228,9 +228,9 @@ def generate_image():
             generate.text(
                 (40, 3 + iteration * 16), item[2], font=fnt, fill="black", anchor="la"
             )
-        # if there is an event today, color the border of the screen in red
-        if cfg.AGENDA["TODAY"] in item[1]:
-            auto().set_border("red")
+            # if there is an event today, color the border of the screen in red
+            if cfg.AGENDA["TODAY"] in item[1]:
+                display.set_border(display.RED)
         # show the current date
         if cfg.OPTIONAL["SHOW_DATE"]:
             generate.text(

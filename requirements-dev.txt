@@ -1,7 +1,8 @@
 notion-client
+numpy==1.21.4
+Pillow==8.4.0
 inky
 black
 pylint
 pytest
 ipython
-Pillow
