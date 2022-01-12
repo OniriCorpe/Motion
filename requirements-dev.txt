@@ -1,7 +1,7 @@
 notion-client
-peewee
 inky
 black
 pylint
 pytest
 ipython
+Pillow
