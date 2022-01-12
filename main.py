@@ -253,7 +253,9 @@ def generate_image():
         # show if something need to be restocked
         if check_db_id(cfg.MEDS["DB_ID"]) and meds_results(meds_retrieve()):
             generate.text((240, 100), "restock", font=fnt, fill="black", anchor="ra")
-    # return generated image with inverted colors
+    # return generated image
+    if cfg.OPTIONAL["FLIP"]:
+        return image.transpose(Image.ROTATE_180)
     return image
 
 
