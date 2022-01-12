@@ -202,13 +202,10 @@ def meds_results(data):
 
 def generate_image():
     """
-    [summary]
-
-    Args:
-        data_img ([type]): [description]
+    Generates an image with the information of the agenda, the current date, etc.
 
     Returns:
-        [type]: [description]
+        image: Properly formatted image.
     """
 
     if cfg.OPTIONAL["FONT"]:
