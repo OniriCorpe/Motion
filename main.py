@@ -8,7 +8,8 @@ Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 
 import sys
 from datetime import date, timedelta
-from pprint import pprint  # debug
+from PIL import Image, ImageDraw, ImageFont
+from inky.auto import auto
 from notion_client import Client
 import config as cfg
 
@@ -199,24 +200,77 @@ def meds_results(data):
     return data_processed
 
 
-if cfg.SHOW_DATE:
-    pprint(date.today().strftime("%d/%m"))
+def generate_image():
+    """
+    [summary]
 
+    Args:
+        data_img ([type]): [description]
 
-if check_notion_token(cfg.NOTION_TOKEN):
-    if check_db_id(cfg.AGENDA["DB_ID"]):
-        pprint(agenda_results(agenda_retrieve()))
+    Returns:
+        [type]: [description]
+    """
+
+    if cfg.OPTIONAL["FONT"]:
+        fnt = ImageFont.truetype(cfg.OPTIONAL["FONT"], 13)
     else:
-        sys.exit(
-            "Please configure your database ID (AGENDA: DB_ID) in your config file."
-        )
-    if check_db_id(cfg.MEDS["DB_ID"]):
-        pprint(meds_results(meds_retrieve()))
-else:
+        fnt = ImageFont.load_default()
+    # initiate a B&W image
+    image = Image.new("L", (250, 122), "white")
+    generate = ImageDraw.Draw(image)
+    for iteration, item in enumerate(agenda_results(agenda_retrieve())):
+        if iteration < 6:
+            # the time before the event
+            generate.text(
+                (35, 3 + iteration * 16), item[1], font=fnt, fill="black", anchor="ra"
+            )
+            # the name of the event
+            generate.text(
+                (40, 3 + iteration * 16), item[2], font=fnt, fill="black", anchor="la"
+            )
+        # if there is an event today, color the border of the screen in red
+        if cfg.AGENDA["TODAY"] in item[1]:
+            auto().set_border("red")
+        # show the current date
+        if cfg.OPTIONAL["SHOW_DATE"]:
+            generate.text(
+                (10, 100),
+                date.today().strftime("%d/%m"),
+                font=fnt,
+                fill="black",
+                anchor="la",
+            )
+        # show a custom text on a (or multiple) custom day of the week
+        for day in cfg.OPTIONAL["DAY"]:
+            if date.today().weekday() == day:
+                generate.text(
+                    (125, 100),
+                    cfg.OPTIONAL["CUSTOM_TEXT"],
+                    font=fnt,
+                    fill="black",
+                    anchor="ma",
+                )
+        # show if something need to be restocked
+        if check_db_id(cfg.MEDS["DB_ID"]) and meds_results(meds_retrieve()):
+            generate.text((240, 100), "restock", font=fnt, fill="black", anchor="ra")
+    # return generated image with inverted colors
+    return image
+
+
+if not check_notion_token(cfg.NOTION_TOKEN):
     sys.exit(
         "Please configure your Notion token in your configuration file.\n"
         "Get your token here: https://developers.notion.com/docs/getting-started"
     )
-
+else:
+    if check_db_id(cfg.AGENDA["DB_ID"]):
+        generate_image().save("/mnt/c/Users/Emelyne/Downloads/test.png")
+        display = auto()
+        display.set_image(generate_image())
+        display.show()
+    else:
+        sys.exit(
+            "Please configure your database ID (AGENDA: DB_ID) in your config file."
+        )
 
 # please note that i'm gay

@@ -41,8 +41,18 @@ AGENDA = {
 }
 
 
-# optional stuff:
-SHOW_DATE = False
+# optional stuff
+OPTIONAL = {
+    # name of your custom font (to put in the root of the folder)
+    # e.g.: "B612-Regulat.ttf"
+    "FONT": "",
+    # Showing the current date on the screen
+    "SHOW_DATE": True,
+    # At a specific day, showing a custom text on a the screen
+    # [0] for Monday, [1] for Tuesday, [2, 6] fow Wednesday AND sunday, etc.
+    "DAY": [],
+    "CUSTOM_TEXT": "",
+}
 
 
 MEDS = {

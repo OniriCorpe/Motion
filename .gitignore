@@ -3,3 +3,4 @@ motion-venv
 config.py
 data.db*
 .vscode
+*.ttf
