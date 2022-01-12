@@ -264,7 +264,6 @@ if not check_notion_token(cfg.NOTION_TOKEN):
     )
 else:
     if check_db_id(cfg.AGENDA["DB_ID"]):
-        generate_image().save("/mnt/c/Users/Emelyne/Downloads/test.png")
         display = auto()
         display.set_image(generate_image())
         display.show()
