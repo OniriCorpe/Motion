@@ -26,3 +26,6 @@ or
 You can execute the program after having activated your venv:
 > $ source activate motion-venv/bin/activate  
 > (motion-venv) $ python main.py
+
+The command to put in your crontab:
+> cd /srv/Motion/ && motion-venv/bin/python3.9 main.py
