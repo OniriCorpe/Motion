@@ -21,8 +21,6 @@ AGENDA = {
     "NUMBER_OF_DAYS": 7,
     # Name of the database's column wich show the name of your events
     "NAME": "Nom",
-    # Name of the database's column wich show the date of your events
-    "DATE": "Date",
     # Name of the database's column wich show the remaining number of days
     # before of your events
     "REMAINING_DAYS": "Nb Jours",
