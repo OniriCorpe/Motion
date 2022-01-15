@@ -21,15 +21,6 @@ AGENDA = {
     "NUMBER_OF_DAYS": 7,
     # Name of the database's column wich show the name of your events
     "NAME": "Nom",
-    # Name of the database's column wich show the remaining number of days
-    # before of your events
-    "REMAINING_DAYS": "Nb Jours",
-    # A word that comes out of the formula in the "Nb Days" column for an event
-    # that takes place today
-    "FILTER_TODAY": "Aujourd’hui",
-    # A word that comes out of the formula in the "Nb Days" column for an event
-    # that will take place tomorrow
-    "FILTER_TOMORROW": "Demain",
     # Short for "days". E.g.: " d"
     "IN_DAYS": " j",
     # Short for "today". E.g.: "tdy" or "2da"

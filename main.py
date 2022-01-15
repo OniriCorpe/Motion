@@ -7,7 +7,7 @@ Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 """
 
 import sys
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from PIL import Image, ImageDraw, ImageFont
 from inky.auto import auto
 from notion_client import Client, APIErrorCode, APIResponseError
@@ -140,7 +140,24 @@ def meds_retrieve():
             return {"results": []}
 
 
-def agenda_results(data):
+def calculate_date_delta(date_start, date_now):
+    """
+    [summary]
+
+    Args:
+        date_start ([type]): [description]
+        date_now ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    return abs(
+        date(int(date_start[:4]), int(date_start[5:7]), int(date_start[8:10]))
+        - date(int(date_now[:4]), int(date_now[5:7]), int(date_now[8:10]))
+    ).days
+
+
+def agenda_results(data, date_now):
     """
     Processes the outpout data of agenda_retrieve().
 
@@ -150,19 +167,21 @@ def agenda_results(data):
 
     data_processed = []
     for item in data["results"]:
-        # get the remaining time before the event
-        number_of_days_before = item["properties"][cfg.AGENDA["REMAINING_DAYS"]][
-            "formula"
-        ]["string"]
-        if cfg.AGENDA["FILTER_TODAY"] in number_of_days_before:
+        # get the event starting date
+        date_start = item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
+        # calculate the remaining days before the event
+        number_of_days_before = calculate_date_delta(date_start, date_now)
+        # format the remaining days before the event
+        if number_of_days_before == 0:
             number_of_days_before = cfg.AGENDA["TODAY"]
-        elif cfg.AGENDA["FILTER_TOMORROW"] in number_of_days_before:
+        elif number_of_days_before == 1:
             number_of_days_before = cfg.AGENDA["TOMORROW"]
         else:
             in_days = cfg.AGENDA["IN_DAYS"]
-            number_of_days_before = f"{number_of_days_before[5:-6]}{in_days}"
+            number_of_days_before = f"{number_of_days_before}{in_days}"
         # get the event name
         name = item["properties"][cfg.AGENDA["NAME"]]["title"][0]["plain_text"]
+        # add the data to the list
         data_processed.append((number_of_days_before, name))
     return data_processed
 
@@ -201,7 +220,8 @@ def generate_image():
     # initiate a B&W image
     image = Image.new("P", (250, 122), "white")
     generate = ImageDraw.Draw(image)
-    for iteration, item in enumerate(agenda_results(agenda_retrieve())):
+    date_now = datetime.now().strftime("%Y-%m-%d")
+    for iteration, item in enumerate(agenda_results(agenda_retrieve(), date_now)):
         if iteration < 6:
             # the time before the event
             generate.text(

@@ -8,21 +8,34 @@ The test file to use with pytest.
 import main
 
 
+def test_calculate_date_delta():
+    """
+    Tests that the function calculate_date_delta(date_start, date_now)
+    calculates correctly the number of days between two dates.
+    """
+
+    assert main.calculate_date_delta("2042-12-13", "2042-12-10") == 3
+    assert main.calculate_date_delta("2014-02-13", "2014-02-14") == 1
+    assert main.calculate_date_delta("1891-03-11", "1891-03-18") == 7
+    assert main.calculate_date_delta("1871-03-18", "1995-02-14") == 45258
+
+
 def test_agenda_results():
     """
     Tests that the function agenda_results(data) formats correctly under all conditions.
     """
 
-    assert not main.agenda_results({"results": []})
+    assert not main.agenda_results({"results": []}, "2022-01-15")
     assert (
         main.agenda_results(
             {
                 "results": [
                     {
                         "properties": {
-                            "Nb Jours": {
-                                "formula": {
-                                    "string": "🚨 Aujourd’hui",
+                            "Date": {
+                                "date": {
+                                    "start": "2022-12-13",
+                                    "end": None,
                                 },
                             },
                             "Nom": {
@@ -35,18 +48,20 @@ def test_agenda_results():
                         },
                     }
                 ],
-            }
+            },
+            "2022-12-13",
         )
-        == [("ajd", "test 1")]
+        == [("ajd", "test 1")],
     )
     assert main.agenda_results(
         {
             "results": [
                 {
                     "properties": {
-                        "Nb Jours": {
-                            "formula": {
-                                "string": "🚨 Aujourd’hui",
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-08",
+                                "end": None,
                             },
                         },
                         "Nom": {
@@ -60,8 +75,11 @@ def test_agenda_results():
                 },
                 {
                     "properties": {
-                        "Nb Jours": {
-                            "formula": {"string": "Dans 2 jours"},
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-09T13:12:00.000+01:00",
+                                "end": None,
+                            },
                         },
                         "Nom": {
                             "title": [
@@ -74,8 +92,11 @@ def test_agenda_results():
                 },
                 {
                     "properties": {
-                        "Nb Jours": {
-                            "formula": {"string": "Dans 3 jours"},
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-11",
+                                "end": "2022-12-12",
+                            },
                         },
                         "Nom": {
                             "title": [
@@ -88,8 +109,11 @@ def test_agenda_results():
                 },
                 {
                     "properties": {
-                        "Nb Jours": {
-                            "formula": {"string": "Dans 5 jours"},
+                        "Date": {
+                            "date": {
+                                "start": "2022-12-12T13:00:00.000+01:00",
+                                "end": "2022-12-14T12:00:00.000+01:00",
+                            },
                         },
                         "Nom": {
                             "title": [
@@ -101,12 +125,13 @@ def test_agenda_results():
                     },
                 },
             ],
-        }
+        },
+        "2022-12-08",
     ) == [
         ("ajd", "test 1"),
-        ("2 j", "test 2"),
+        ("dem", "test 2"),
         ("3 j", "test 3"),
-        ("5 j", "test 4"),
+        ("4 j", "test 4"),
     ]
 
 
