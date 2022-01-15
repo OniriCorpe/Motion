@@ -142,14 +142,15 @@ def meds_retrieve():
 
 def calculate_date_delta(date_start, date_now):
     """
-    [summary]
+    Calculates the number of days between two dates.
 
     Args:
-        date_start ([type]): [description]
-        date_now ([type]): [description]
+        date_start (string) : The date of the event from which to subtract the other date.
+        date_now (string): The current date to be subtracted to the other date.
+        The two arguments must be formatted as follows: "%Y-%m-%d"
 
     Returns:
-        [type]: [description]
+        int: The number of days between the two dates.
     """
     return abs(
         date(int(date_start[:4]), int(date_start[5:7]), int(date_start[8:10]))
