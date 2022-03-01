@@ -233,7 +233,7 @@ def generate_image():
                 (40, 3 + iteration * 16), item[1], font=fnt, fill="black", anchor="la"
             )
             # if there is an event today, color the border of the screen in red
-            if cfg.AGENDA["TODAY"] in item[0]:
+            if not cfg.DEBUG["ENABLED"] and cfg.AGENDA["TODAY"] in item[0]:
                 display.set_border(display.RED)
     # show the current date
     if cfg.OPTIONAL["SHOW_DATE"]:
