@@ -39,10 +39,21 @@ OPTIONAL = {
     "SHOW_DATE": True,
     # Flip the screen
     "FLIP": True,
-    # At a specific day, showing a custom text on a the screen
-    # [0] for Monday, [1] for Tuesday, [2, 6] fow Wednesday AND sunday, etc.
-    "DAY": [],
-    "CUSTOM_TEXT": "",
+    # In even or odd weeks, at a specific day, showing a custom text on a the screen
+    # [0] for Monday, [1] for Tuesday, [2, 6] for Wednesday AND sunday, etc.
+    # https://pythontic.com/datetime/date/weekday
+    # egs.:
+    # ["my custom text", 1, 2] : will display "my custom text" every Tuesday and Wednesday.
+    # [["my custom text", 1, 2], ["my custom text 2", 4, 5]] : same as above plus
+    # but will also display "my custom text 2" every Friday and Saturday.
+    # [["odd", "odd week", 1, 2], ["even", "even week", 4, 5]] : will display
+    # "odd week" each Tuesday and Wednesday of odd-numbered weeks and "even week"
+    # each Friday and Saturday of evan-numbered weeks.
+    "CUSTOM_TEXT": [
+        ["", 1, 3],
+        ["odd", "", 2, 4],
+        ["even", "", 3, 5],
+    ],
 }
 
 

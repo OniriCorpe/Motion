@@ -201,3 +201,29 @@ def test_meds_results():
         )
         == ["test 1 : ≥1", "test 2 : ≥2"]
     )
+
+
+def test_custom_text():
+    """
+    Tests that the function custom_text() returns good data.
+    """
+
+    assert main.custom_text([], 2, 14) == ""
+    assert main.custom_text([["test not today", 2]], 1, 14) == ""
+    assert main.custom_text([["test today", 2]], 2, 14) == "test today"
+    assert main.custom_text([["odd", "test odd", 2]], 2, 14) == "test odd"
+    assert main.custom_text([["even", "test not even", 2]], 2, 14) == ""
+    assert main.custom_text([["odd", "test not odd", 2]], 2, 15) == ""
+    assert main.custom_text([["even", "test even", 2]], 2, 15) == "test even"
+    assert (
+        main.custom_text(
+            [["test multiple lists not today", 2], ["test multiple lists", 3]], 1, 14
+        )
+        == ""
+    )
+    assert (
+        main.custom_text(
+            [["test multiple lists 1", 2], ["test multiple lists 2", 1]], 1, 14
+        )
+        == "test multiple lists 2"
+    )

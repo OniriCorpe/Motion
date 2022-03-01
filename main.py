@@ -206,6 +206,45 @@ def meds_results(data):
     return data_processed
 
 
+def custom_text(data, day_number, week_number):
+    """
+    Processes cfg.OPTIONAL["CUSTOM_TEXT"].
+
+    Args:
+        data (list): A list containing optionally "odd" or "even", the custom
+            text, then the days it should be displayed. The list may contain
+            several lists that meet these items.
+        day_number (int): The number of the weekday, as date.today().weekday()
+        week_number (int): The number of the week of the year, as date.today().isocalendar().week
+
+    Returns:
+        string: The custom text if the defined conditions
+            (even or odd week, day of the week) are met.
+    """
+
+    for item in data:
+
+        # extract only the ints (day's number) from the list and make a new list with them
+        days = []
+        for day in item:
+            if isinstance(day, int):
+                days.append(day)
+
+        # check if the current day is a day defined in the configuration file
+        for day in days:
+            if day_number == day:
+                if item[0] == "odd":
+                    if (week_number % 2) == 0:
+                        return item[1]
+                elif item[0] == "even":
+                    if (week_number % 2) != 0:
+                        return item[1]
+                else:
+                    return item[0]
+    # if there is nothing, return an empty text
+    return ""
+
+
 def generate_image():
     """
     Generates an image with the information of the agenda, the current date, etc.
@@ -245,15 +284,17 @@ def generate_image():
             anchor="la",
         )
     # show a custom text on a (or multiple) custom day of the week
-    for day in cfg.OPTIONAL["DAY"]:
-        if date.today().weekday() == day:
-            generate.text(
-                (125, 100),
-                cfg.OPTIONAL["CUSTOM_TEXT"],
-                font=fnt,
-                fill="black",
-                anchor="ma",
-            )
+    generate.text(
+        (125, 100),
+        custom_text(
+            cfg.OPTIONAL["CUSTOM_TEXT"],
+            date.today().weekday(),
+            date.today().isocalendar().week,
+        ),
+        font=fnt,
+        fill="black",
+        anchor="ma",
+    )
     # show if something need to be restocked
     if meds_results(meds_retrieve()):
         generate.text(
