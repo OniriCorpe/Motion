@@ -63,7 +63,10 @@ MEDS = {
     "CUSTOM_TEXT": "restock",
 }
 
+
 DEBUG = {
+    # If True, saves the generated image instead of trying to display it on the InkyPhat
     "ENABLED": False,
+    # Path to where you want to save the image
     "SAVE_PATH": "/tmp/test.png",
 }
