@@ -235,28 +235,28 @@ def generate_image():
             # if there is an event today, color the border of the screen in red
             if cfg.AGENDA["TODAY"] in item[0]:
                 display.set_border(display.RED)
-        # show the current date
-        if cfg.OPTIONAL["SHOW_DATE"]:
+    # show the current date
+    if cfg.OPTIONAL["SHOW_DATE"]:
+        generate.text(
+            (10, 100),
+            date.today().strftime("%d/%m"),
+            font=fnt,
+            fill="black",
+            anchor="la",
+        )
+    # show a custom text on a (or multiple) custom day of the week
+    for day in cfg.OPTIONAL["DAY"]:
+        if date.today().weekday() == day:
             generate.text(
-                (10, 100),
-                date.today().strftime("%d/%m"),
+                (125, 100),
+                cfg.OPTIONAL["CUSTOM_TEXT"],
                 font=fnt,
                 fill="black",
-                anchor="la",
+                anchor="ma",
             )
-        # show a custom text on a (or multiple) custom day of the week
-        for day in cfg.OPTIONAL["DAY"]:
-            if date.today().weekday() == day:
-                generate.text(
-                    (125, 100),
-                    cfg.OPTIONAL["CUSTOM_TEXT"],
-                    font=fnt,
-                    fill="black",
-                    anchor="ma",
-                )
-        # show if something need to be restocked
-        if meds_results(meds_retrieve()):
-            generate.text((240, 100), "restock", font=fnt, fill="black", anchor="ra")
+    # show if something need to be restocked
+    if meds_results(meds_retrieve()):
+        generate.text((240, 100), "restock", font=fnt, fill="black", anchor="ra")
     # return generated image
     if cfg.OPTIONAL["FLIP"]:
         return image.transpose(Image.ROTATE_180)
