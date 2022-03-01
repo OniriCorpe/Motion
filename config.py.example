@@ -60,6 +60,7 @@ MEDS = {
     "NAME": "Nom",
     # Name of the database's column wich show the number of units to be restocked
     "NUMBER": "NbRefill",
+    # You can customise the text displayed if an item needs to be restocked
     "CUSTOM_TEXT": "restock",
 }
 
