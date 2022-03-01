@@ -60,4 +60,10 @@ MEDS = {
     "NAME": "Nom",
     # Name of the database's column wich show the number of units to be restocked
     "NUMBER": "NbRefill",
+    "CUSTOM_TEXT": "restock",
+}
+
+DEBUG = {
+    "ENABLED": False,
+    "SAVE_PATH": "/tmp/test.png",
 }

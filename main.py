@@ -256,16 +256,20 @@ def generate_image():
             )
     # show if something need to be restocked
     if meds_results(meds_retrieve()):
-        generate.text((240, 100), "restock", font=fnt, fill="black", anchor="ra")
+        generate.text(
+            (240, 100), cfg.MEDS["CUSTOM_TEXT"], font=fnt, fill="black", anchor="ra"
+        )
     # return generated image
     if cfg.OPTIONAL["FLIP"]:
         return image.transpose(Image.ROTATE_180)
     return image
 
 
-display = auto()
-display.set_image(generate_image())
-display.show()
-# generate_image().save("/mnt/c/Users/Emelyne/Downloads/test.png")
+if not cfg.DEBUG["ENABLED"]:
+    display = auto()
+    display.set_image(generate_image())
+    display.show()
+else:
+    generate_image().save(cfg.DEBUG["SAVE_PATH"])
 
 # please note that i'm gay
