@@ -224,14 +224,22 @@ def custom_text(data, day_number, week_number):
 
     for item in data:
 
-        # extract only the ints (day's number) from the list and make a new list with them
-        days = []
-        for day in item:
-            if isinstance(day, int):
-                days.append(day)
+        # change the int into a tupple if applicable,
+        # and assign the tuple to the "days" variable
+        if item[0] == "odd" or item[0] == "even":
+            if isinstance(item[2], int):
+                days = (item[2],)
+            elif isinstance(item[2], tuple):
+                days = item[2]
+        else:
+            if isinstance(item[1], int):
+                days = (item[1],)
+            elif isinstance(item[1], tuple):
+                days = item[1]
 
         # check if the current day is a day defined in the configuration file
         for day in days:
+            print("process")
             if day_number == day:
                 if item[0] == "odd":
                     if (week_number % 2) == 0:
@@ -241,6 +249,7 @@ def custom_text(data, day_number, week_number):
                         return item[1]
                 else:
                     return item[0]
+
     # if there is nothing, return an empty text
     return ""
 

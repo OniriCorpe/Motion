@@ -210,11 +210,22 @@ def test_custom_text():
 
     assert main.custom_text([], 2, 14) == ""
     assert main.custom_text([["test not today", 2]], 1, 14) == ""
+    assert main.custom_text([["test not today tuple", (2, 3)]], 1, 14) == ""
     assert main.custom_text([["test today", 2]], 2, 14) == "test today"
+    assert main.custom_text([["test today tuple", (0, 2)]], 2, 14) == "test today tuple"
     assert main.custom_text([["odd", "test odd", 2]], 2, 14) == "test odd"
-    assert main.custom_text([["even", "test not even", 2]], 2, 14) == ""
-    assert main.custom_text([["odd", "test not odd", 2]], 2, 15) == ""
+    assert (
+        main.custom_text([["odd", "test odd tuple", (2, 5)]], 2, 14) == "test odd tuple"
+    )
     assert main.custom_text([["even", "test even", 2]], 2, 15) == "test even"
+    assert (
+        main.custom_text([["even", "test even tuple", (2, 6)]], 2, 15)
+        == "test even tuple"
+    )
+    assert main.custom_text([["even", "test not even", 2]], 2, 14) == ""
+    assert main.custom_text([["even", "test not even tuple", (2, 6)]], 2, 14) == ""
+    assert main.custom_text([["odd", "test not odd", 2]], 2, 15) == ""
+    assert main.custom_text([["odd", "test not odd tuple", (2, 6)]], 2, 15) == ""
     assert (
         main.custom_text(
             [["test multiple lists not today", 2], ["test multiple lists", 3]], 1, 14
@@ -223,7 +234,26 @@ def test_custom_text():
     )
     assert (
         main.custom_text(
+            [
+                ["test multiple lists not today tuple", (2, 4)],
+                ["test multiple lists 2", 3],
+            ],
+            1,
+            14,
+        )
+        == ""
+    )
+    assert (
+        main.custom_text(
             [["test multiple lists 1", 2], ["test multiple lists 2", 1]], 1, 14
+        )
+        == "test multiple lists 2"
+    )
+    assert (
+        main.custom_text(
+            [["test multiple lists 1 tuple", (2, 5)], ["test multiple lists 2", 1]],
+            1,
+            14,
         )
         == "test multiple lists 2"
     )
