@@ -239,7 +239,6 @@ def custom_text(data, day_number, week_number):
 
         # check if the current day is a day defined in the configuration file
         for day in days:
-            print("process")
             if day_number == day:
                 if item[0] == "odd":
                     if (week_number % 2) == 0:
