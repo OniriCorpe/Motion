@@ -206,6 +206,23 @@ def meds_results(data):
     return data_processed
 
 
+def int_to_tuple(number):
+    """
+    Change the int into a tupple if applicable.
+    If the arg is already a tuple, return it directly.
+
+    Args:
+        number (int or tuple): The number to convert in tuple if not already a tuple.
+
+    Returns:
+        tuple: The number formated into tuple to return.
+    """
+
+    if isinstance(number, int):
+        return (number,)
+    return number
+
+
 def custom_text(data, day_number, week_number):
     """
     Processes cfg.OPTIONAL["CUSTOM_TEXT"].
@@ -224,18 +241,11 @@ def custom_text(data, day_number, week_number):
 
     for item in data:
 
-        # change the int into a tupple if applicable,
-        # and assign the tuple to the "days" variable
+        # assign the tuple to the "days" variable
         if item[0] == "odd" or item[0] == "even":
-            if isinstance(item[2], int):
-                days = (item[2],)
-            elif isinstance(item[2], tuple):
-                days = item[2]
+            days = int_to_tuple(item[2])
         else:
-            if isinstance(item[1], int):
-                days = (item[1],)
-            elif isinstance(item[1], tuple):
-                days = item[1]
+            days = int_to_tuple(item[1])
 
         # check if the current day is a day defined in the configuration file
         for day in days:

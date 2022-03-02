@@ -203,6 +203,18 @@ def test_meds_results():
     )
 
 
+def test_int_to_tuple():
+    """
+    Tests that the function int_to_tuple() returns tuples.
+    """
+
+    assert main.int_to_tuple(1) == (1,)
+    assert main.int_to_tuple((2,)) == (2,)
+    assert main.int_to_tuple((3, )) == (3,)  # fmt: skip
+    assert main.int_to_tuple((4, 5)) == (4, 5)
+    assert main.int_to_tuple((6,7)) == (6, 7)  # fmt: skip
+
+
 def test_custom_text():
     """
     Tests that the function custom_text() returns good data.
