@@ -141,66 +141,60 @@ def test_meds_results():
     """
 
     assert not main.meds_results({"results": []})
-    assert (
-        main.meds_results(
-            {
-                "results": [
-                    {
-                        "properties": {
-                            "NbRefill": {
-                                "formula": {"number": 1},
-                            },
-                            "Nom": {
-                                "title": [
-                                    {
-                                        "plain_text": "test 1",
-                                    }
-                                ],
-                            },
+    assert main.meds_results(
+        {
+            "results": [
+                {
+                    "properties": {
+                        "NbRefill": {
+                            "formula": {"number": 1},
                         },
-                    }
-                ],
-            }
-        )
-        == ["test 1 : ≥1"]
-    )
-    assert (
-        main.meds_results(
-            {
-                "results": [
-                    {
-                        "properties": {
-                            "NbRefill": {
-                                "formula": {"number": 1},
-                            },
-                            "Nom": {
-                                "title": [
-                                    {
-                                        "plain_text": "test 1",
-                                    }
-                                ],
-                            },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 1",
+                                }
+                            ],
                         },
                     },
-                    {
-                        "properties": {
-                            "NbRefill": {
-                                "formula": {"number": 2},
-                            },
-                            "Nom": {
-                                "title": [
-                                    {
-                                        "plain_text": "test 2",
-                                    }
-                                ],
-                            },
+                }
+            ],
+        }
+    ) == ["test 1 : ≥1"]
+    assert main.meds_results(
+        {
+            "results": [
+                {
+                    "properties": {
+                        "NbRefill": {
+                            "formula": {"number": 1},
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 1",
+                                }
+                            ],
                         },
                     },
-                ]
-            }
-        )
-        == ["test 1 : ≥1", "test 2 : ≥2"]
-    )
+                },
+                {
+                    "properties": {
+                        "NbRefill": {
+                            "formula": {"number": 2},
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test 2",
+                                }
+                            ],
+                        },
+                    },
+                },
+            ]
+        }
+    ) == ["test 1 : ≥1", "test 2 : ≥2"]
 
 
 def test_int_to_tuple():
@@ -215,37 +209,46 @@ def test_int_to_tuple():
     assert main.int_to_tuple((6,7)) == (6, 7)  # fmt: skip
 
 
-def test_custom_text():
+def test_generate_custom_text():
     """
-    Tests that the function custom_text() returns good data.
+    Tests that the function generate_custom_text() returns good data.
     """
 
-    assert main.custom_text([], 2, 14) == ""
-    assert main.custom_text([["test not today", 2]], 1, 14) == ""
-    assert main.custom_text([["test not today tuple", (2, 3)]], 1, 14) == ""
-    assert main.custom_text([["test today", 2]], 2, 14) == "test today"
-    assert main.custom_text([["test today tuple", (0, 2)]], 2, 14) == "test today tuple"
-    assert main.custom_text([["odd", "test odd", 2]], 2, 14) == "test odd"
+    assert main.generate_custom_text([], 2, 14) == ""
+    assert main.generate_custom_text([["test not today", 2]], 1, 14) == ""
+    assert main.generate_custom_text([["test not today tuple", (2, 3)]], 1, 14) == ""
+    assert main.generate_custom_text([["test today", 2]], 2, 14) == "test today"
     assert (
-        main.custom_text([["odd", "test odd tuple", (2, 5)]], 2, 14) == "test odd tuple"
+        main.generate_custom_text([["test today tuple", (0, 2)]], 2, 14)
+        == "test today tuple"
     )
-    assert main.custom_text([["even", "test even", 2]], 2, 15) == "test even"
+    assert main.generate_custom_text([["odd", "test odd", 2]], 2, 14) == "test odd"
     assert (
-        main.custom_text([["even", "test even tuple", (2, 6)]], 2, 15)
+        main.generate_custom_text([["odd", "test odd tuple", (2, 5)]], 2, 14)
+        == "test odd tuple"
+    )
+    assert main.generate_custom_text([["even", "test even", 2]], 2, 15) == "test even"
+    assert (
+        main.generate_custom_text([["even", "test even tuple", (2, 6)]], 2, 15)
         == "test even tuple"
     )
-    assert main.custom_text([["even", "test not even", 2]], 2, 14) == ""
-    assert main.custom_text([["even", "test not even tuple", (2, 6)]], 2, 14) == ""
-    assert main.custom_text([["odd", "test not odd", 2]], 2, 15) == ""
-    assert main.custom_text([["odd", "test not odd tuple", (2, 6)]], 2, 15) == ""
+    assert main.generate_custom_text([["even", "test not even", 2]], 2, 14) == ""
     assert (
-        main.custom_text(
+        main.generate_custom_text([["even", "test not even tuple", (2, 6)]], 2, 14)
+        == ""
+    )
+    assert main.generate_custom_text([["odd", "test not odd", 2]], 2, 15) == ""
+    assert (
+        main.generate_custom_text([["odd", "test not odd tuple", (2, 6)]], 2, 15) == ""
+    )
+    assert (
+        main.generate_custom_text(
             [["test multiple lists not today", 2], ["test multiple lists", 3]], 1, 14
         )
         == ""
     )
     assert (
-        main.custom_text(
+        main.generate_custom_text(
             [
                 ["test multiple lists not today tuple", (2, 4)],
                 ["test multiple lists 2", 3],
@@ -256,13 +259,13 @@ def test_custom_text():
         == ""
     )
     assert (
-        main.custom_text(
+        main.generate_custom_text(
             [["test multiple lists 1", 2], ["test multiple lists 2", 1]], 1, 14
         )
         == "test multiple lists 2"
     )
     assert (
-        main.custom_text(
+        main.generate_custom_text(
             [["test multiple lists 1 tuple", (2, 5)], ["test multiple lists 2", 1]],
             1,
             14,

@@ -223,7 +223,7 @@ def int_to_tuple(number):
     return number
 
 
-def custom_text(data, day_number, week_number):
+def generate_custom_text(data, day_number, week_number):
     """
     Processes cfg.OPTIONAL["CUSTOM_TEXT"].
 
@@ -279,6 +279,11 @@ def generate_image():
     image = Image.new("P", (250, 122), "white")
     generate = ImageDraw.Draw(image)
     date_now = datetime.now().strftime("%Y-%m-%d")
+    custom_text = generate_custom_text(
+        cfg.OPTIONAL["CUSTOM_TEXT"],
+        date.today().weekday(),
+        date.today().isocalendar().week,
+    )
     for iteration, item in enumerate(agenda_results(agenda_retrieve(), date_now)):
         if iteration < 6:
             # the time before the event
@@ -290,7 +295,9 @@ def generate_image():
                 (40, 3 + iteration * 16), item[1], font=fnt, fill="black", anchor="la"
             )
             # if there is an event today, color the border of the screen in red
-            if not cfg.DEBUG["ENABLED"] and cfg.AGENDA["TODAY"] in item[0]:
+            if not cfg.DEBUG["ENABLED"] and (
+                cfg.AGENDA["TODAY"] in item[0] or custom_text != ""
+            ):
                 display.set_border(display.RED)
     # show the current date
     if cfg.OPTIONAL["SHOW_DATE"]:
@@ -304,11 +311,7 @@ def generate_image():
     # show a custom text on a (or multiple) custom day of the week
     generate.text(
         (125, 100),
-        custom_text(
-            cfg.OPTIONAL["CUSTOM_TEXT"],
-            date.today().weekday(),
-            date.today().isocalendar().week,
-        ),
+        custom_text,
         font=fnt,
         fill="black",
         anchor="ma",
