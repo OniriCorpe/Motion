@@ -7,16 +7,19 @@ Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 """
 
 import sys
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from PIL import Image, ImageDraw, ImageFont
 from inky.auto import auto
 from notion_client import Client, APIErrorCode, APIResponseError
 import config as cfg
 
 
-def agenda_retrieve():
+def agenda_retrieve(date_now):
     """
     Retrieves data from the "AGENDA" database from the Notion API.
+
+    Args:
+        today's date: as date.today()
     """
 
     # query to the notion API
@@ -36,7 +39,7 @@ def agenda_retrieve():
                                 # Date filter condition:
                                 # https://developers.notion.com/reference/post-database-query#date-filter-condition
                                 # get today's date then format it correctly
-                                "on_or_after": date.today().strftime("%Y-%m-%d"),
+                                "on_or_after": date_now.strftime("%Y-%m-%d"),
                             },
                         },
                         {
@@ -48,7 +51,7 @@ def agenda_retrieve():
                                 "on_or_before": (
                                     # add the number of days defined in the
                                     # configuration file to the today's date
-                                    date.today()
+                                    date_now
                                     + timedelta(days=cfg.AGENDA["NUMBER_OF_DAYS"])
                                     # then format it correctly
                                 ).strftime("%Y-%m-%d"),
@@ -278,13 +281,15 @@ def generate_image():
     # initiate a B&W image
     image = Image.new("P", (250, 122), "white")
     generate = ImageDraw.Draw(image)
-    date_now = datetime.now().strftime("%Y-%m-%d")
+    date_now = date.today()
     custom_text = generate_custom_text(
         cfg.OPTIONAL["CUSTOM_TEXT"],
-        date.today().weekday(),
-        date.today().isocalendar().week,
+        date_now.weekday(),
+        date_now.isocalendar().week,
     )
-    for iteration, item in enumerate(agenda_results(agenda_retrieve(), date_now)):
+    for iteration, item in enumerate(
+        agenda_results(agenda_retrieve(date_now), date_now.strftime("%Y-%m-%d"))
+    ):
         if iteration < 6:
             # the time before the event
             generate.text(
@@ -303,7 +308,7 @@ def generate_image():
     if cfg.OPTIONAL["SHOW_DATE"]:
         generate.text(
             (10, 100),
-            date.today().strftime("%d/%m"),
+            date_now.strftime("%d/%m"),
             font=fnt,
             fill="black",
             anchor="la",
