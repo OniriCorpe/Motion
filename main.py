@@ -166,7 +166,7 @@ def agenda_results(data, date_now):
     Processes the outpout data of agenda_retrieve().
 
     Returns :
-    A list of all events to come in a number of rolling days configured in the config file.
+        A list of all events to come in a number of rolling days configured in the config file.
     """
 
     data_processed = []
@@ -195,7 +195,7 @@ def meds_results(data):
     Processes the outpout data of meds_retrieve().
 
     Returns :
-    A list of all items to be restocked properly formatted.
+        A list of all items to be restocked properly formatted.
     """
 
     data_processed = []
