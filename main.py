@@ -305,7 +305,7 @@ def generate_image():
             )
             # if there is an event today, color the border of the screen in red
             if not cfg.DEBUG["ENABLED"] and (
-                cfg.AGENDA["TODAY"] in item[0] or custom_text != ""
+                cfg.AGENDA["TODAY"] in item[0] or ":" in item[0] or custom_text != ""
             ):
                 display.set_border(display.RED)
     # show the current date
