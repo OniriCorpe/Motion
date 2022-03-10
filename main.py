@@ -177,7 +177,8 @@ def agenda_results(data, date_now):
         number_of_days_before = calculate_date_delta(date_start, date_now)
         # format the remaining days before the event
         if number_of_days_before == 0:
-            if "T" in date_start:
+            if "T" in date_start:  # if hour data
+                # get the hour only
                 number_of_days_before = date_start.split("T")[1][:5]
             else:
                 number_of_days_before = cfg.AGENDA["TODAY"]
@@ -296,11 +297,11 @@ def generate_image():
         if iteration < 6:
             # the time before the event
             generate.text(
-                (35, 3 + iteration * 16), item[0], font=fnt, fill="black", anchor="ra"
+                (40, 3 + iteration * 16), item[0], font=fnt, fill="black", anchor="ra"
             )
             # the name of the event
             generate.text(
-                (40, 3 + iteration * 16), item[1], font=fnt, fill="black", anchor="la"
+                (45, 3 + iteration * 16), item[1], font=fnt, fill="black", anchor="la"
             )
             # if there is an event today, color the border of the screen in red
             if not cfg.DEBUG["ENABLED"] and (
