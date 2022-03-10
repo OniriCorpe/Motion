@@ -13,19 +13,19 @@ Optionally, you can activate the display of the current date and the display of 
 ## Installation
 
 For good practices and safety, please use a [venv](https://docs.python.org/3/library/venv.html).
-> $ python3 -m venv motion-venv  
+> $ python3.9 -m venv motion-venv  
 > $ source activate motion-venv/bin/activate
 
 Then install the dependencies:
-> (motion-venv) $ pip install -r requirements-dev.txt  # For dev environment
+> (motion-venv) $ python3.9 -m pip install -r requirements-dev.txt  # For dev environment
 
 or
 
-> (motion-venv) $ pip install -r requirements-rpi.txt  # For prod environment
+> (motion-venv) $ python3.9 -m pip install -r requirements-rpi.txt  # For prod environment
 
 You can execute the program after having activated your venv:
 > $ source activate motion-venv/bin/activate  
-> (motion-venv) $ python main.py
+> (motion-venv) $ python3.9 main.py
 
 The command to put in your crontab:
 > cd /srv/Motion/ && motion-venv/bin/python3.9 main.py
