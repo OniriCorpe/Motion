@@ -53,6 +53,33 @@ def test_agenda_results():
         )
         == [("ajd", "test 1")],
     )
+    assert (
+        main.agenda_results(
+            {
+                "results": [
+                    {
+                        "properties": {
+                            "Date": {
+                                "date": {
+                                    "start": "2022-12-13T13:12:00.000+01:00",
+                                    "end": None,
+                                },
+                            },
+                            "Nom": {
+                                "title": [
+                                    {
+                                        "plain_text": "test heure",
+                                    }
+                                ],
+                            },
+                        },
+                    }
+                ],
+            },
+            "2022-12-13",
+        )
+        == [("13:12", "test heure")],
+    )
     assert main.agenda_results(
         {
             "results": [
@@ -77,6 +104,23 @@ def test_agenda_results():
                     "properties": {
                         "Date": {
                             "date": {
+                                "start": "2022-12-08T13:12:00.000+01:00",
+                                "end": None,
+                            },
+                        },
+                        "Nom": {
+                            "title": [
+                                {
+                                    "plain_text": "test heure 2",
+                                }
+                            ],
+                        },
+                    },
+                },
+                {
+                    "properties": {
+                        "Date": {
+                            "date": {
                                 "start": "2022-12-09T13:12:00.000+01:00",
                                 "end": None,
                             },
@@ -84,7 +128,7 @@ def test_agenda_results():
                         "Nom": {
                             "title": [
                                 {
-                                    "plain_text": "test 2",
+                                    "plain_text": "test 3",
                                 }
                             ],
                         },
@@ -101,7 +145,7 @@ def test_agenda_results():
                         "Nom": {
                             "title": [
                                 {
-                                    "plain_text": "test 3",
+                                    "plain_text": "test 4",
                                 }
                             ],
                         },
@@ -118,7 +162,7 @@ def test_agenda_results():
                         "Nom": {
                             "title": [
                                 {
-                                    "plain_text": "test 4",
+                                    "plain_text": "test 5",
                                 }
                             ],
                         },
@@ -129,9 +173,10 @@ def test_agenda_results():
         "2022-12-08",
     ) == [
         ("ajd", "test 1"),
-        ("dem", "test 2"),
-        ("3 j", "test 3"),
-        ("4 j", "test 4"),
+        ("13:12", "test heure 2"),
+        ("dem", "test 3"),
+        ("3 j", "test 4"),
+        ("4 j", "test 5"),
     ]
 
 
