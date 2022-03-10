@@ -177,7 +177,10 @@ def agenda_results(data, date_now):
         number_of_days_before = calculate_date_delta(date_start, date_now)
         # format the remaining days before the event
         if number_of_days_before == 0:
-            number_of_days_before = cfg.AGENDA["TODAY"]
+            if "T" in date_start:
+                number_of_days_before = date_start.split("T")[1][:5]
+            else:
+                number_of_days_before = cfg.AGENDA["TODAY"]
         elif number_of_days_before == 1:
             number_of_days_before = cfg.AGENDA["TOMORROW"]
         else:
