@@ -1,5 +1,5 @@
 __pycache__
-motion-venv
+*venv*
 config.py
 data.db*
 .vscode
