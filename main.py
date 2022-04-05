@@ -161,9 +161,54 @@ def calculate_date_delta(date_start, date_now):
     ).days
 
 
-def agenda_results(data, date_now):
+def agenda_format_day(
+    number_of_days_before,
+    date_start,
+    cfg_today,
+    cfg_tomorrow,
+    cfg_in_days,
+):
+    """
+    Formats the string who indicates if the event is today, tomorrow, or else
+        in an arbitrary number of day.
+
+    Args:
+        cfg_agenda_today (string): The text to show if the event is today.
+        cfg_agenda_tomorrow (string): The text to if the event happens tomorrow.
+        in_days (string): The text to concatenate after the number of days before
+            the event, if it will happen in a number of days greater than tomorrow.
+
+    Returns :
+        The final formated string who indicates when will be the event.
+    """
+
+    if number_of_days_before == 0:
+        if "T" in date_start:  # if hour data
+            # get the hour only
+            number_of_days_before = date_start.split("T")[1][:5]
+        else:
+            number_of_days_before = cfg_today
+    elif number_of_days_before == 1:
+        number_of_days_before = cfg_tomorrow
+    else:
+        number_of_days_before = f"{number_of_days_before}{cfg_in_days}"
+    return number_of_days_before
+
+
+def agenda_results(
+    data,
+    date_now,
+    cfg_date,
+    cfg_name,
+):
     """
     Processes the outpout data of agenda_retrieve().
+
+    Args:
+        data (properly formated dicts and lists) : The Notion's API response.
+        date_now (string): The current date to be subtracted to the other date.
+        cfg_date (string): Name of the database's column wich show the date of your events
+        cfg_name (string): Name of the database's column wich show the name of your events
 
     Returns :
         A list of all events to come in a number of rolling days configured in the config file.
@@ -172,23 +217,18 @@ def agenda_results(data, date_now):
     data_processed = []
     for item in data["results"]:
         # get the event starting date
-        date_start = item["properties"][cfg.AGENDA["DATE"]]["date"]["start"]
+        date_start = item["properties"][cfg_date]["date"]["start"]
         # calculate the remaining days before the event
         number_of_days_before = calculate_date_delta(date_start, date_now)
-        # format the remaining days before the event
-        if number_of_days_before == 0:
-            if "T" in date_start:  # if hour data
-                # get the hour only
-                number_of_days_before = date_start.split("T")[1][:5]
-            else:
-                number_of_days_before = cfg.AGENDA["TODAY"]
-        elif number_of_days_before == 1:
-            number_of_days_before = cfg.AGENDA["TOMORROW"]
-        else:
-            in_days = cfg.AGENDA["IN_DAYS"]
-            number_of_days_before = f"{number_of_days_before}{in_days}"
+        number_of_days_before = agenda_format_day(
+            number_of_days_before,
+            date_start,
+            cfg.AGENDA["TODAY"],
+            cfg.AGENDA["TOMORROW"],
+            cfg.AGENDA["IN_DAYS"],
+        )
         # get the event name
-        name = item["properties"][cfg.AGENDA["NAME"]]["title"][0]["plain_text"]
+        name = item["properties"][cfg_name]["title"][0]["plain_text"]
         # add the data to the list
         data_processed.append((number_of_days_before, name))
     return data_processed
@@ -292,7 +332,12 @@ def generate_image():
         date_now.isocalendar().week,
     )
     for iteration, item in enumerate(
-        agenda_results(agenda_retrieve(date_now), date_now.strftime("%Y-%m-%d"))
+        agenda_results(
+            agenda_retrieve(date_now),
+            date_now.strftime("%Y-%m-%d"),
+            cfg.AGENDA["DATE"],
+            cfg.AGENDA["NAME"],
+        )
     ):
         if iteration < 6:
             # the time before the event

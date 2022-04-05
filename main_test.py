@@ -20,12 +20,81 @@ def test_calculate_date_delta():
     assert main.calculate_date_delta("1871-03-18", "1995-02-14") == 45258
 
 
+def test_agenda_format_day():
+    """
+    Tests that the function agenda_format_day(
+        number_of_days_before,
+        date_start,
+        cfg_today,
+        cfg_tomorrow,
+        cfg_in_days,)
+    formats properly a the string.
+    """
+
+
+assert (
+    main.agenda_format_day(
+        0,
+        "2022-13-12",
+        "ajd",
+        "dem",
+        " j",
+    )
+    == "ajd"
+)
+assert (
+    main.agenda_format_day(
+        0,
+        "2021-05-10T13:12:00",
+        "ajd",
+        "dem",
+        " j",
+    )
+    == "13:12"
+)
+assert (
+    main.agenda_format_day(
+        1,
+        "2022-13-12",
+        "ajd",
+        "dem",
+        " j",
+    )
+    == "dem"
+)
+assert (
+    main.agenda_format_day(
+        2,
+        "2022-13-12",
+        "ajd",
+        "dem",
+        " j",
+    )
+    == "2 j"
+)
+assert (
+    main.agenda_format_day(
+        3,
+        "2022-13-12",
+        "ajd",
+        "dem",
+        " j",
+    )
+    == "3 j"
+)
+
+
 def test_agenda_results():
     """
     Tests that the function agenda_results(data) formats correctly under all conditions.
     """
 
-    assert not main.agenda_results({"results": []}, "2022-01-15")
+    assert not main.agenda_results(
+        {"results": []},
+        "2022-01-15",
+        "Date",
+        "Nom",
+    )
     assert (
         main.agenda_results(
             {
@@ -50,6 +119,8 @@ def test_agenda_results():
                 ],
             },
             "2022-12-13",
+            "Date",
+            "Nom",
         )
         == [("ajd", "test 1")],
     )
@@ -77,6 +148,8 @@ def test_agenda_results():
                 ],
             },
             "2022-12-13",
+            "Date",
+            "Nom",
         )
         == [("13:12", "test heure")],
     )
@@ -171,6 +244,8 @@ def test_agenda_results():
             ],
         },
         "2022-12-08",
+        "Date",
+        "Nom",
     ) == [
         ("ajd", "test 1"),
         ("13:12", "test heure 2"),
