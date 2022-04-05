@@ -31,57 +31,56 @@ def test_agenda_format_day():
     formats properly a the string.
     """
 
-
-assert (
-    main.agenda_format_day(
-        0,
-        "2022-13-12",
-        "ajd",
-        "dem",
-        " j",
+    assert (
+        main.agenda_format_day(
+            0,
+            "2022-13-12",
+            "ajd",
+            "dem",
+            " j",
+        )
+        == "ajd"
     )
-    == "ajd"
-)
-assert (
-    main.agenda_format_day(
-        0,
-        "2021-05-10T13:12:00",
-        "ajd",
-        "dem",
-        " j",
+    assert (
+        main.agenda_format_day(
+            0,
+            "2021-05-10T13:12:00",
+            "ajd",
+            "dem",
+            " j",
+        )
+        == "13:12"
     )
-    == "13:12"
-)
-assert (
-    main.agenda_format_day(
-        1,
-        "2022-13-12",
-        "ajd",
-        "dem",
-        " j",
+    assert (
+        main.agenda_format_day(
+            1,
+            "2022-13-12",
+            "ajd",
+            "dem",
+            " j",
+        )
+        == "dem"
     )
-    == "dem"
-)
-assert (
-    main.agenda_format_day(
-        2,
-        "2022-13-12",
-        "ajd",
-        "dem",
-        " j",
+    assert (
+        main.agenda_format_day(
+            2,
+            "2022-13-12",
+            "ajd",
+            "dem",
+            " j",
+        )
+        == "2 j"
     )
-    == "2 j"
-)
-assert (
-    main.agenda_format_day(
-        3,
-        "2022-13-12",
-        "ajd",
-        "dem",
-        " j",
+    assert (
+        main.agenda_format_day(
+            3,
+            "2022-13-12",
+            "ajd",
+            "dem",
+            " j",
+        )
+        == "3 j"
     )
-    == "3 j"
-)
 
 
 def test_agenda_results():
