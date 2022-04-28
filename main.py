@@ -8,6 +8,7 @@ Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
 
 import sys
 from datetime import date, timedelta
+import re
 from PIL import Image, ImageDraw, ImageFont
 from inky.auto import auto
 from notion_client import Client, APIErrorCode, APIResponseError
@@ -155,9 +156,20 @@ def calculate_date_delta(date_start, date_now):
     Returns:
         int: The number of days between the two dates.
     """
+
+    start = re.split("-", date_start)
+    now = re.split("-", date_now)
     return abs(
-        date(int(date_start[:4]), int(date_start[5:7]), int(date_start[8:10]))
-        - date(int(date_now[:4]), int(date_now[5:7]), int(date_now[8:10]))
+        date(
+            int(start[0]),
+            int(start[1]),
+            int(start[2]),
+        )
+        - date(
+            int(now[0]),
+            int(now[1]),
+            int(now[2]),
+        )
     ).days
 
 
@@ -218,7 +230,9 @@ def agenda_results(
         # get the event starting date
         date_start = item["properties"][cfg_date]["date"]["start"]
         # calculate the remaining days before the event
-        number_of_days_before = calculate_date_delta(date_start, date_now)
+        number_of_days_before = calculate_date_delta(
+            re.split("T", date_start)[0], date_now
+        )
         number_of_days_before = agenda_format_day(
             number_of_days_before,
             date_start,
