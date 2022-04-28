@@ -230,11 +230,9 @@ def agenda_results(
         # get the event starting date
         date_start = item["properties"][cfg_date]["date"]["start"]
         # calculate the remaining days before the event
-        number_of_days_before = calculate_date_delta(
-            re.split("T", date_start)[0], date_now
-        )
-        number_of_days_before = agenda_format_day(
-            number_of_days_before,
+        days_before_event = calculate_date_delta(re.split("T", date_start)[0], date_now)
+        days_before_event = agenda_format_day(
+            days_before_event,
             date_start,
             cfg.AGENDA["TODAY"],
             cfg.AGENDA["TOMORROW"],
@@ -243,7 +241,7 @@ def agenda_results(
         # get the event name
         name = item["properties"][cfg_name]["title"][0]["plain_text"]
         # add the data to the list
-        data_processed.append((number_of_days_before, name))
+        data_processed.append((days_before_event, name))
     return data_processed
 
 
