@@ -185,14 +185,11 @@ def agenda_format_day(
     if number_of_days_before == 0:
         if "T" in date_start:  # if hour data
             # get the hour only
-            number_of_days_before = date_start.split("T")[1][:5]
-        else:
-            number_of_days_before = cfg_today
-    elif number_of_days_before == 1:
-        number_of_days_before = cfg_tomorrow
-    else:
-        number_of_days_before = f"{number_of_days_before}{cfg_in_days}"
-    return number_of_days_before
+            return date_start.split("T")[1][:5]
+        return cfg_today
+    if number_of_days_before == 1:
+        return cfg_tomorrow
+    return f"{number_of_days_before}{cfg_in_days}"
 
 
 def agenda_results(
