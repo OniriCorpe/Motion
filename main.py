@@ -173,22 +173,24 @@ def agenda_format_day(
         in an arbitrary number of day.
 
     Args:
-        cfg_agenda_today (string): The text to show if the event is today.
-        cfg_agenda_tomorrow (string): The text to if the event happens tomorrow.
-        in_days (string): The text to concatenate after the number of days before
+        number_of_days_before (int): The number of days before the event.
+        date_start (string): ISO 8601 formated date (& time).
+        cfg_today (string): The text to show if the event is today.
+        cfg_tomorrow (string): The text to if the event happens tomorrow.
+        cfg_in_days (string): The text to concatenate after the number of days before
             the event, if it will happen in a number of days greater than tomorrow.
 
     Returns :
         The final formated string who indicates when will be the event.
     """
 
-    if number_of_days_before == 0:
-        if "T" in date_start:  # if hour data
-            # get the hour only
-            return date_start.split("T")[1][:5]
+    if number_of_days_before == 0:  # if today
+        if "T" in date_start:  # if there is time data
+            return date_start.split("T")[1][:5]  # get the hour only
         return cfg_today
-    if number_of_days_before == 1:
+    if number_of_days_before == 1:  # if tomorrow
         return cfg_tomorrow
+    # else return the remaining number of days before the event
     return f"{number_of_days_before}{cfg_in_days}"
 
 
