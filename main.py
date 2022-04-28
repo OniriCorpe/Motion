@@ -3,7 +3,7 @@
 """
 A shitty 🦝 project to display the next events of my Notion calendar on a
 mall e-ink screen (Pimoroni's Inky Phat) connected to a Raspberry Pi Zero W."
-Related git repository: https://labo.emelyne.eu/oniricorpe/Motion
+Related git repository: https://labo.oniricorpe.eu/oniricorpe/Motion
 """
 
 import sys
